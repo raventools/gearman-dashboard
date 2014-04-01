@@ -4,14 +4,17 @@
     <script src="/assets/libraries/underscorejs/underscore-min.js"></script>
     <script src="/assets/libraries/backbonejs/backbone-min.js"></script>
 
+    <!-- Global include -->
+    <script src="/assets/js/global.js"></script>
+
     <!-- Common methods -->
     <script src="/assets/js/fn.js"></script>
 
     <!-- Backbone route helper (abstraction) -->
     <script src="/assets/js/routehelper.js"></script>
 
-    <!-- Backbone routes -->
-    <script src="/assets/js/backbone-modules/dashboard.js"></script>
+    <!-- AJAX request helper (abstraction) -->
+    <script src="/assets/js/request.js"></script>
 
     <!-- Models -->
 	<script src="/assets/js/models/errors.js"></script>    
@@ -19,5 +22,8 @@
 	<script src="/assets/js/models/processes.js"></script>    
 	<script src="/assets/js/models/servers.js"></script>    
 	<script src="/assets/js/models/workers.js"></script>    
+
+    <!-- Backbone routes -->
+    <script src="/assets/js/backbone-modules/dashboard.js"></script>
   </body>
 </html>

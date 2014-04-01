@@ -7,6 +7,7 @@
     <title>Gearman Dashboard</title>
 
     <link href="/assets/libraries/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/dashboard.css" rel="stylesheet">
   </head>
 
   <body>
