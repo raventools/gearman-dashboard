@@ -3,9 +3,9 @@
 class Dashboard extends CI_Controller {
 
 	public function index() {
+		$this->_header();
 		$this->_backbone();
-		
-		// $this->load->view('welcome_message');
+		$this->_footer();
 	}
 
 	private function _header() {

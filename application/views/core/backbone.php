@@ -1,1 +1,1 @@
-    <h1>Hello, world!</h1>
+<div id="backbone_container"></div>
