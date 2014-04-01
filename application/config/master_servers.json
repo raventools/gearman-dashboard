@@ -1,0 +1,14 @@
+{
+	"Gearman Server Default": {
+		"public_ip": "184.73.18.200",
+		"port": 4730
+	},
+	"Gearman Server SA": {
+		"public_ip": "184.73.23.108",
+		"port": 4730
+	},
+	"Gearman Server - Prince": {
+		"public_ip": "107.20.236.235",
+		"port": 4730
+	}
+}
