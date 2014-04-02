@@ -1,6 +1,6 @@
 <?php
 
-class MasterServers_model extends CI_Model {
+class Masters_model extends CI_Model {
 
 	public function __construct() {
 		$this->load();	
@@ -16,7 +16,7 @@ class MasterServers_model extends CI_Model {
 	}
 
 	private function load() {
-		if(($raw_servers = file_get_contents("application/config/master_servers.json")) === false) {
+		if(($raw_servers = file_get_contents("application/config/masters.json")) === false) {
 			throw new Exception("failed to load master server config");
 		}
 		if(($this->servers = json_decode($raw_servers)) === false) {

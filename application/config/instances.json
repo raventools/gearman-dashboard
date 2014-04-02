@@ -1,0 +1,10 @@
+{
+	"Default Array": {
+		"Default Instance": {
+			"pub_ip": "127.0.0.1",
+			"priv_ip": "127.0.0.1",
+			"port": 9110,
+			"workers": 4
+		}
+	}
+}
