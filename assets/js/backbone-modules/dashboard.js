@@ -21,7 +21,7 @@ var Dashboard = {
 };
 
 Dashboard.Servers = function (filter_type, filter_id) {
-	var content = $('<div class="row" />');
+	RouteHelper.init();
 
 	if (fn.empty(filter_type)) {
 		filter_type = 'all';
@@ -31,20 +31,27 @@ Dashboard.Servers = function (filter_type, filter_id) {
 		filter_id = 0;
 	}
 
-	Models.Servers.getServerList({}, function (data) {
-		_.each(data.servers, function (server) {
-			var new_listing = $('<div class="col-md-4" />');
+	if (filter_id == 0) {
+		RouteHelper.appendContent($('<div class="row" id="table_holder" />'));
 
-			new_listing.append('<span class="server-name">' + server.name + '</span>');
-			new_listing.append('<span class="server-health">' + server.stats.health + '</span>');
+		Models.Servers.getServersSummary({}, function (data) {
+			var content = TemplateHelper.renderTemplate('servers_summary', data);
 
-			content.append(new_listing);
+			RouteHelper.prependContent(content);
 		});
 
-		RouteHelper.changeContent(content);
-	});
+		Models.Servers.getServersByHealth({}, function (data) {
+			var content = TemplateHelper.renderTemplate('servers_by_health', data);
 
-	RouteHelper.changeContent('Loading...');
+			RouteHelper.appendContent(content, '#table_holder');
+		});	
+
+		Models.Servers.getServersByWorkers({}, function (data) {
+			var content = TemplateHelper.renderTemplate('servers_by_workers', data);
+
+			RouteHelper.appendContent(content, '#table_holder');
+		});
+	}
 };
 
 Dashboard.Metapackages = function () {

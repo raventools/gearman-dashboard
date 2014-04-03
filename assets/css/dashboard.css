@@ -12,3 +12,9 @@ span.server-name {
 span.server-health {
 	font-size: 32px;
 }
+
+div.loader-animation {
+	text-align: center;
+}
+
+.clear { clear: both; }

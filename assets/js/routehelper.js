@@ -1,6 +1,17 @@
 var Routes = {},
 	RouteHelper = {};
 
+RouteHelper.container = $('#backbone_container');
+
+/* perform initializing actions, such as clearing the content area */
+RouteHelper.init = function () {
+	(RouteHelper.container).html('<div class="loader-animation"><img src="/assets/img/loading.gif" /></div>');
+};
+
+RouteHelper.clearLoader = function () {
+	$('div.loader-animation').remove();
+};
+
 RouteHelper.addRoute = function (name, route_definition) {
 	return Routes[name] = Backbone.Router.extend(route_definition);	
 };
@@ -16,13 +27,24 @@ RouteHelper.changeContent = function (content) {
 		return false;
 	}
 
-	$('#backbone_container').html(content);
+	RouteHelper.clearLoader();
+
+	(RouteHelper.container).html(content);
 };
 
-RouteHelper.appendContent = function (content) {
-	$('#backbone_container').append(content);
+RouteHelper.appendContent = function (content, sub_container) {
+	RouteHelper.clearLoader();
+
+	if (!fn.empty(sub_container)) {
+		$(sub_container, RouteHelper.container).append(content);
+	}	
+	else {
+		(RouteHelper.container).append(content);	
+	}
 };
 
 RouteHelper.prependContent = function (content) {
-	$('#backbone_container').prepend(content);
+	RouteHelper.clearLoader();
+
+	(RouteHelper.container).prepend(content);
 };
