@@ -1,5 +1,7 @@
 
 	<div class="col-md-6">
+		<h4>Servers (by health)</h4>
+
 		<table id="servers_by_health" class="table table-bordered">
 			<thead>
 				<th>Server Name</th>

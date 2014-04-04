@@ -1,3 +1,5 @@
+<h3>Overall Summary</h3>
+
 <div class="row">
 	{{#each servers}}
 		<div class="col-md-4">
