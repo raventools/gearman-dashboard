@@ -99,11 +99,9 @@ class GearmanDashboardAPI extends CI_Controller {
 			$this->load->model("workers_model");
 			$instance = $this->instances_model->get($array_id,$instance_id);
 			$workers = $this->workers_model->get($instance->priv_ip,$instance->port,$worker_id);
-
 		} catch(Exception $e) {
 			$this->ERROR($e->getMessage());
 		}
-
 
 		if($workers === false) {
 			$this->ERROR("Workers: not found",array("instance"=>$instance));

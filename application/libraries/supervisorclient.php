@@ -16,6 +16,11 @@ class SupervisorClient
     private $_timeout = null;
     private $_socket = null;
 
+	private $_username = null;
+	private $_password = null;
+
+	private $_authenticated = null;
+
     /**
      * Construct a supervisor client instance.
      * These parameters are handed over to fsockopen() so refer to its documentation for further details.
@@ -30,6 +35,17 @@ class SupervisorClient
         $this->_port = $port;
         $this->_timeout = is_null($timeout) ? ini_get("default_socket_timeout") : $timeout;
     }
+
+	function authenticate($username,$password) 
+	{
+		$this->_username = $username;
+		$this->_password = $password;
+
+		if($this->getAPIVersion() !== NULL) {
+			$this->_authenticated = true;
+		}
+		return $this->_authenticated;
+	}
 
     // Status and Control methods
 
@@ -224,12 +240,44 @@ class SupervisorClient
 
     // Implementation
 
-    private function _rpcCall($namespace, $method, $args=array())
-    {
+	private function _rpcCall($namespace, $method, $args=array())
+	{
         if (!is_array($args)) {
             $args = array($args);
-        }
+		}
 
+        $xml_rpc = \xmlrpc_encode_request("$namespace.$method", $args, array('encoding'=>'utf-8'));
+
+//		return $this->_rpcCall_fsockopen($xml_rpc, $args);
+		return $this->_rpcCall_curl($xml_rpc, $args);
+	}
+
+	private function _rpcCall_curl($xml_rpc)
+	{
+		$uri = "http://{$this->_hostname}:{$this->_port}/RPC2";
+		$ch = curl_init($uri);
+		$headers = array(
+				"Content-type: text/xml",
+				"Content-length: ".strlen($xml_rpc)
+				);
+
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_rpc);
+		if(!empty($this->_username) && !empty($this->_password)) {
+			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC ) ;
+			curl_setopt($ch, CURLOPT_USERPWD, "{$this->_username}:{$this->_password}"); 
+		}
+
+
+		$response = curl_exec($ch);
+
+		return xmlrpc_decode($response,'utf-9');
+	}
+
+    private function _rpcCall_fsockopen($xml_rpc)
+    {
         // Open socket if needed.
 
         if (is_null($this->_socket)) {
@@ -242,12 +290,11 @@ class SupervisorClient
 
         // Send request.
 
-        $xml_rpc = \xmlrpc_encode_request("$namespace.$method", $args, array('encoding'=>'utf-8'));
         $http_request = "POST /RPC2 HTTP/1.1\r\n".
                         "Content-Length: " . strlen($xml_rpc) .
                         "\r\n\r\n" .
                         $xml_rpc;
-        fwrite($this->_socket, $http_request);
+        $written = fwrite($this->_socket, $http_request);
 
         // Receive response.
 
