@@ -1,6 +1,6 @@
 <?php
 
-class Workers_model extends CI_Model {
+class Workers_model extends MY_Model {
 
 	private $timeout = 10;
 
@@ -28,7 +28,7 @@ class Workers_model extends CI_Model {
 	private function load($ip,$port) {
 		$supervisor = new SupervisorClient($ip,$port,$this->timeout);
 		try {
-			$auth = $this->getAuth();
+			$auth = $this->loadConfig("supervisord");
 			if($supervisor->authenticate($auth->user,$auth->password) === false) {
 				throw new Exception("invalid supervisor user/pass");
 			}
