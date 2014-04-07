@@ -12,6 +12,7 @@ class Rightscale_model extends CI_Model {
 	 * loads rightscale api client
 	 */
 	private function load() {
+		$config = $this->loadConfig("rightscale");
 		$this->rs = new Rightscale($config->account_id,$config->username,$config->password);
 	}
 

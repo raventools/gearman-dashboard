@@ -48,14 +48,4 @@ class Workers_model extends MY_Model {
 		}
 		return (count($this->workers) > 0 ? true : false);
 	}
-
-	private function getAuth() {
-		if(($json = file_get_contents("application/config/supervisord.json")) === false) {
-			throw new Exception("supervisord.json not found");
-		}
-		if(($auth = json_decode($json)) === false) {
-			throw new Exception("invalid json in supervisord.json");
-		}
-		return $auth;
-	}
 }
