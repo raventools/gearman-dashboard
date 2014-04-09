@@ -1,0 +1,5 @@
+.*.swp
+*.swp
+application/config/*.json
+vagrant/overrides.json
+vagrant/.vagrant

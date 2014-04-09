@@ -17,3 +17,10 @@ default[:gearman_dashboard][:supervisord][:password] = "12345"
 default[:gearman_dashboard][:deploy][:repo] = "git@github.com:raventools/gearman-dashboard.git"
 default[:gearman_dashboard][:deploy][:branch] = "master"
 default[:gearman_dashboard][:deploy][:key] = ""
+
+# php config tuning
+default[:gearman_dashboard][:php_conf] = [
+	"log_errors = On",
+	"error_log = /var/log/httpd/php_error_log",
+	"date.timezone = US/Eastern"
+	]

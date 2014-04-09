@@ -4,3 +4,10 @@ bash "flush-iptables" do
         iptables -F
     EOH
 end
+
+bash "fix-dns" do
+    code <<-EOH
+        echo "options single-request-reopen" >> /etc/resolv.conf
+    EOH
+end
+

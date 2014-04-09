@@ -418,13 +418,13 @@
 			$server_template_id = $matches[1];
 			preg_match("#deployments/([0-9]+)$#",$raw->deployment_href,$matches);
 			$deployment_id = $matches[1];
-			preg_match("#/([0-9]+)(/current)?#",$raw->href,$matches);
+			preg_match("#/([0-9]+)(/current)?$#",$raw->href,$matches);
 			$id = $matches[1];
 			$out = (object) array(
 					"server_template_id" => $server_template_id,
 					"deployment_id" => $deployment_id,
 					"name" => $raw->nickname,
-					"state" => $raw->state,
+					"state" => (isset($raw->state) ? $raw->state : null),
 					"inputs" => $this->parseInputs($raw),
 					"id" => $id
 					);
@@ -432,7 +432,7 @@
 		}
 
 		public function parseInputs($raw) {
-			if(is_array($raw->parameters)) {
+			if(isset($raw->parameters) && is_array($raw->parameters)) {
 				$inputs = new StdClass();
 				foreach($raw->parameters as $input) {
 					$inputs->{$input->name} = $input->value;
