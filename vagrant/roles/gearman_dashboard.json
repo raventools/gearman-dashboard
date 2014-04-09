@@ -16,14 +16,9 @@
 			},
 			"vhost":{
 					"name":"gearman_dashboard",
-					"servername":"gearman.ravenvagrant.site",
-					"serveraliases":["gearmandashboard.ravenvagrant.site"],
-					"documentroot":"/home/webapps/gearmandashboard/"
-			},
-			"deploy": {
-				"repo": "git@github.com:raventools/gearman-dashboard.git",
-				"branch": "master",
-				"key": "-----BEGIN DSA PRIVATE KEY-----\nMIIBuwIBAAKBgQChZTrJLTXXpL4sWZ\/z8jitMMe\/ChLuaDL4z9HGLIDzeaiuJB5r\n2qjADoPp8gqGj7XvQ2v6M2Xq\/cHyUtJjHdUjk99POIEpERQ8CxHOTDgnHs3+fIrt\n8e8VZz0TlI2Pogshh8Ri+UxmBn6CTZcWo2O9Efp3kngJMfn1iS\/Tg90XbwIVAJSX\nEZiXZo1eWRXlauScY18EqWaHAoGASfLQXIp1\/esPo2M+SvIYRHl2lwzcCzSjX+1e\nYkhLcoI81\/M9ONX+\/AD1Y94iNYJQttOhnzzGLjESx9RJ2CCr9MHXkvK67wGPIh\/W\ni21eKwbkzoJbHpBgAXK0ZYlFe3OId7CpHqMMhpjGEvtS0x0o6HUaLlGAUV05Xjyh\n8ngJMhkCgYADUNquMegXBqTJB3NOASxb5uO5bX7aXSII1LHr5O39n4iX5nbdg6AF\nqjxYifuyYTV1K6kuin1XQ6y7HG4mIoXZFG7vCtbIn5345j2QUWHHAq9HysxWu8tl\n\/l8IEzlV13XYhQiGrArbntLgFO7U3Q8pCasrMDi1\/NRxFa5X1+SU9AIVAIYomHqx\nnGdaLgAlyMGMxX21pjoV\n-----END DSA PRIVATE KEY-----\n"
+					"servername":"gearman_dashboard.site",
+					"serveraliases":["www.gearman_dashboard.site"],
+					"documentroot":"/home/webapps/gearman_dashboard/"
 			}
 		}
 	},
@@ -33,7 +28,8 @@
 	"run_list": [
 		"gearman_dashboard::default",
 		"gearman_dashboard::vagrant",
-		"gearman_dashboard::deploy_tag"
+		"gearman_dashboard::setup_rightscale",
+		"gearman_dashboard::setup_supervisord"
 	],
 	"env_run_lists": {
 	}

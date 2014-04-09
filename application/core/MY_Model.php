@@ -10,6 +10,9 @@ class MY_Model extends CI_Model {
 
 		$name = strtolower($name);
 		$path = APPPATH . "/config/{$name}.json";
+		if(!is_file($path)) {
+			return false;
+		}
 		if(($json = file_get_contents($path)) === false) {
 			throw new Exception("failed loading config $path");
 		}

@@ -4,6 +4,9 @@ class Arrays_model extends MY_Model {
 
 	public function __construct() {
 		$this->arrays = $this->loadConfig("arrays");
+		if($this->arrays === false) {
+			$this->refresh();
+		}
 	}
 
 	public function get($master_id, $array_id=null) {

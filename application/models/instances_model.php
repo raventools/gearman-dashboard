@@ -3,7 +3,10 @@
 class Instances_model extends MY_Model {
 
 	public function __construct() {
-		$this->loadConfig("instances");
+		$this->instances = $this->loadConfig("instances");
+		if($this->instances === false) {
+			$this->refresh();
+		}
 	}
 
 	public function get($array_id,$instance_id=null) {

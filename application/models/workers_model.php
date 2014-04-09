@@ -13,7 +13,7 @@ class Workers_model extends MY_Model {
 	}
 
 	public function get($ip,$port,$worker_id=null) {
-		if($this->load($ip,$port) === false) {
+		if($this->fetch($ip,$port) === false) {
 			return false;
 		}
 
@@ -25,7 +25,7 @@ class Workers_model extends MY_Model {
 		return false;
 	}
 
-	private function load($ip,$port) {
+	private function fetch($ip,$port) {
 		$supervisor = new SupervisorClient($ip,$port,$this->timeout);
 		try {
 			$auth = $this->loadConfig("supervisord");

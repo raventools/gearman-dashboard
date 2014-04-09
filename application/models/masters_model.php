@@ -4,6 +4,9 @@ class Masters_model extends MY_Model {
 
 	public function __construct() {
 		$this->servers = $this->loadConfig("masters");
+		if($this->servers === false) {
+			$this->refresh();
+		}
 	}
 
 	public function get($id=null) {

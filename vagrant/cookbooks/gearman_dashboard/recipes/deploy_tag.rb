@@ -19,11 +19,6 @@ end
 
 package "git"
 
-directory node[:gearman_dashboard][:vhost][:documentroot] do
-	action :create
-	recursive true
-end
-
 git node[:gearman_dashboard][:vhost][:documentroot] do
 	repository node[:gearman_dashboard][:deploy][:repo]
 	reference node[:gearman_dashboard][:deploy][:branch]

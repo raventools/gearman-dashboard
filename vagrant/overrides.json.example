@@ -1,13 +1,14 @@
 {
+	"local_repo_dir":"/path/to/local/repo",
 	"gearman_dashboard":{
 		"supervisord":{
 			"username":"super",
-			"password":"92617462d03666a6a11f6e48d41c9cf1"
+			"password":"pass"
 		},
 		"rightscale":{
-			"account_id": "6950",
-			"username": "system@sitening.com",
-			"password": "BAPokeX9V4yQHT"
+			"account_id": "0000",
+			"username": "bogus@email.com",
+			"password": "bogus"
 		}
 	}
 }
