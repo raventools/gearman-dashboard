@@ -12,6 +12,9 @@ class Rightscale_model extends MY_Model {
 	public function masters() {
 		$masters = array();
 		$raw_servers = $this->rs->getServerByTags("server:type=gearman_master");
+		if($raw_servers === false) {
+			return array();
+		}
 
 		foreach($raw_servers as $raw) {
 			$parsed = $this->rs->parseServer($raw);
@@ -20,6 +23,7 @@ class Rightscale_model extends MY_Model {
 			$master = (object) array(
 					"id" => $parsed->id,
 					"public_ip" => $details->{"ip-address"},
+					"private_ip" => $details->{"private-ip-address"},
 					"port" => 4730
 					);
 			$masters[$parsed->name] = $master;
@@ -31,6 +35,10 @@ class Rightscale_model extends MY_Model {
 	public function arrays() {
 		$arrays = array();
 		$raw_arrays = $this->rs->getArrayByTags("server:type=gearman_instance");
+		if($raw_arrays === false) {
+			return array();
+		}
+
 		foreach($raw_arrays as $raw) {
 			$parsed = $this->rs->parseServer($raw);
 			$array = (object) array(
@@ -50,6 +58,10 @@ class Rightscale_model extends MY_Model {
 	public function instances() {
 		$instances = array();
 		$raw_instances = $this->rs->getServerByTags("server:type=gearman_instance");
+		if($raw_instances === false) {
+			return array();
+		}
+
 		foreach($raw_instances as $raw) {
 			$parsed = $this->rs->parseServer($raw);
 			$instances[$parsed->name] = $parsed;
