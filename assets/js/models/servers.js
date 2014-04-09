@@ -1,5 +1,22 @@
 Models.Servers = {
 	'endpoint' : '/dashboard/api', // dummy endpoint
+	'api_endpoint' : '/gearmandashboardapi/',
+
+	'getMasters' : function (options, callback) {
+		Request.get(this.api_endpoint + 'masters', {}, function (response) {
+			if (_.isFunction(callback)) {
+				callback(response);
+			}
+		}, 'json');		
+	},
+
+	'getInstances' : function (options, callback) {
+		Request.get(this.api_endpoint + 'instances', {}, function (response) {
+			if (_.isFunction(callback)) {
+				callback(response);
+			}
+		}, 'json');		
+	},
 
 	'getServersSummary' : function (options, callback) {
 		var filter_type = 'all',

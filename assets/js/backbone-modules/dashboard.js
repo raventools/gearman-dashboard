@@ -31,6 +31,14 @@ Dashboard.Servers = function (filter_type, filter_id) {
 		filter_id = 0;
 	}
 
+	Models.Servers.getMasters({}, function (data) {
+		console.log('masters data: ', data);
+	});
+
+	Models.Servers.getInstances({}, function (data) {
+		console.log('instances data: ', data);
+	});
+
 	if (filter_id == 0) {
 		RouteHelper.appendContent($('<div class="row" id="table_holder" />'));
 
