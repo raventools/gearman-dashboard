@@ -1,5 +1,17 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * auto-load libraries from application/libraries/{strtolower(classname)}.php
+ */
+spl_autoload_register(function($classname) {
+			$classname = strtolower($classname);
+			$path = APPPATH . "/libraries/{$classname}.php";
+			if(is_file($path)) {
+				require_once($path);
+			}
+		});
+
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
