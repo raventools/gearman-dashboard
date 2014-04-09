@@ -1,0 +1,36 @@
+{
+	"name": "gearman_dashboard",
+	"description": "",
+	"json_class": "Chef::Role",
+	"default_attributes": {
+		"tmp_dir":"/vagrant/cache",
+		"gearman_dashboard":{
+			"rightscale":{
+				"account_id": "0000",
+				"username": "gearman@dashboard.com",
+				"password": "12345"
+			},
+			"supervisord":{
+				"username":"super",
+				"password":"Insecure"
+			},
+			"vhost":{
+					"name":"gearman_dashboard",
+					"servername":"gearman_dashboard.site",
+					"serveraliases":["www.gearman_dashboard.site"],
+					"documentroot":"/home/webapps/gearman_dashboard/"
+			}
+		}
+	},
+	"override_attributes": {
+	},
+	"chef_type": "role",
+	"run_list": [
+		"gearman_dashboard::default",
+		"gearman_dashboard::vagrant",
+		"gearman_dashboard::setup_rightscale",
+		"gearman_dashboard::setup_supervisord"
+	],
+	"env_run_lists": {
+	}
+}

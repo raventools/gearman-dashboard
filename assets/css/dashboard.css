@@ -1,0 +1,20 @@
+#backbone_container {
+	margin: 20px;
+}
+
+span.server-name {
+	font-size: 14px;
+	font-weight: bolder;
+	text-transform: uppercase;
+	display: block;
+}
+
+span.server-health {
+	font-size: 32px;
+}
+
+div.loader-animation {
+	text-align: center;
+}
+
+.clear { clear: both; }
