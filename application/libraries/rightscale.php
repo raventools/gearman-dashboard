@@ -18,6 +18,10 @@
 			$this->account = $account;
 			$this->login($username, $password);
 			$this->url_base = "https://my.rightscale.com/api/acct/{$this->account}/";
+
+			$this->debug = true; // remove this
+
+			
 			parent::__construct();
 		}
 

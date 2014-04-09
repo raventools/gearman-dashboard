@@ -33,7 +33,7 @@ class RestApi {
 		// allow for dependency injection, defaults to standard CurlLibrary
 		if (isset($curlLibrary)) {
 			$this->curlLibrary = $curlLibrary;
-		} elseif (isset($this->curlLibrary) === false) {
+		} elseif (!($this->curlLibrary instanceof CurlLibrary)) { // was somehow getting set to stdClass? i dunno lol
 			$this->curlLibrary = new CurlLibrary($this->debug);
 		}
 	}

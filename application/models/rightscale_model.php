@@ -15,9 +15,11 @@ class Rightscale_model extends MY_Model {
 		if($raw_servers === false) {
 			return array();
 		}
+
 		foreach($raw_servers as $raw) {
 			$parsed = $this->rs->parseServer($raw);
 			$details = $this->rs->getServerSettings($parsed->id);
+
 			$master = (object) array(
 					"id" => $parsed->id,
 					"public_ip" => $details->{"ip-address"},
@@ -26,6 +28,7 @@ class Rightscale_model extends MY_Model {
 					);
 			$masters[$parsed->name] = $master;
 		}
+
 		return $masters;
 	}
 
@@ -35,6 +38,7 @@ class Rightscale_model extends MY_Model {
 		if($raw_arrays === false) {
 			return array();
 		}
+
 		foreach($raw_arrays as $raw) {
 			$parsed = $this->rs->parseServer($raw);
 			$array = (object) array(
@@ -57,6 +61,7 @@ class Rightscale_model extends MY_Model {
 		if($raw_instances === false) {
 			return array();
 		}
+
 		foreach($raw_instances as $raw) {
 			$parsed = $this->rs->parseServer($raw);
 			$instances[$parsed->name] = $parsed;
