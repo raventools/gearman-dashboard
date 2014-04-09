@@ -9,10 +9,12 @@ class MY_Model extends CI_Model {
 	protected function loadConfig($name) {
 
 		$name = strtolower($name);
-		$path = APPPATH . "/config/{$name}.json";
-		if(!is_file($path)) {
-			return false;
+		$path = APPPATH . "config/{$name}.json";
+
+		if (!file_exists($path)) {
+			return new StdClass;
 		}
+
 		if(($json = file_get_contents($path)) === false) {
 			throw new Exception("failed loading config $path");
 		}
@@ -26,7 +28,12 @@ class MY_Model extends CI_Model {
 
 	protected function saveConfig($name,$data) {
 		$name = strtolower($name);
-		$path = APPPATH . "/config/{$name}.json";
+		$path = APPPATH . "config/{$name}.json";
+
+		if (!file_exists($path)) {
+			touch($path); // inappropriately
+		}
+		
 		if(($json = json_encode($data)) === false) {
 			throw new Exception("error while encoding json");
 		}
