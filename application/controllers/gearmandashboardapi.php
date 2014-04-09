@@ -110,6 +110,36 @@ class GearmanDashboardAPI extends CI_Controller {
 		}
 	}
 
+	/**
+	 * refreshes cached json for one of (masters|arrays|instances) or all
+	 */
+	public function Refresh($module = "all") {
+		switch($module) {
+			case "masters":
+				$this->load->model("masters_model");
+				$this->masters_model->refresh();
+				break;
+			case "arrays":
+				$this->load->model("arrays_model");
+				$this->arrays_model->refresh();
+				break;
+			case "instances":
+				$this->load->model("instances_model");
+				$this->instances_model->refresh();
+				break;
+			default:
+			case "all":
+				$this->load->model("masters_model");
+				$this->masters_model->refresh();
+				$this->load->model("arrays_model");
+				$this->arrays_model->refresh();
+				$this->load->model("instances_model");
+				$this->instances_model->refresh();
+				break;
+		}
+		$this->OK("Refresh");
+	}
+
 	protected function OK($details,$data=null) {
 		$this->response("OK",$details,$data);
 	}

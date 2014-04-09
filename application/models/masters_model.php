@@ -1,9 +1,9 @@
 <?php
 
-class Masters_model extends CI_Model {
+class Masters_model extends MY_Model {
 
 	public function __construct() {
-		$this->load();	
+		$this->servers = $this->loadConfig("masters");
 	}
 
 	public function get($id=null) {
@@ -15,12 +15,9 @@ class Masters_model extends CI_Model {
 		return false;
 	}
 
-	private function load() {
-		if(($raw_servers = file_get_contents("application/config/masters.json")) === false) {
-			throw new Exception("failed to load master server config");
-		}
-		if(($this->servers = json_decode($raw_servers)) === false) {
-			throw new Exception("invalid json detected in master server config");
-		}
+	public function refresh() {
+		$this->load->model("rightscale_model");
+		$this->servers = $this->rightscale_model->masters();
+		$this->saveConfig("masters",$this->servers);
 	}
 }

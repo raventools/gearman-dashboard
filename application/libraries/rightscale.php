@@ -99,12 +99,32 @@
 			return 0;
 		}
 
+		function getServerByTags($tags) {
+			/*
+			if(is_string($tags)) {
+				$tags = array($tags);
+			}
+			*/
+			$extra['get']['resource_type'] = "ec2_instance";
+			$extra['get']['tags'] = $tags;
+			$url = "tags/search.{$this->format}";
+			return $this->request($url,$extra);
+		}
+
+		function getArrayByTags($tags) {
+			$extra['get']['resource_type'] = "server_array";
+			$extra['get']['tags'] = $tags;
+			$url = "tags/search.{$this->format}";
+		//	$this->debug=true;
+			return $this->request($url,$extra);
+		}
+
 		function getEC2Instance($id)
 		{
 			$url = "ec2_instances/{$id}.{$this->format}";
 			return $this->request($url);
 		}
-		
+
 		function runScript($server_id, $script_id, $ignore_lock = false, $inputs = null)
 		{
 			$tmp = $this->get_location;
@@ -239,6 +259,12 @@
 			$url = "server_arrays/$id.{$this->format}";
 			return $this->request($url);
 		}
+
+		function getServerArraySettings($id) {
+			$url = "server_arrays/$id/settings.{$this->format}";
+			return $this->request($url);
+		}
+
 		function getAuditEntry($id)
 		{
 			$url = "audit_entries/$id.{$this->format}";
@@ -385,5 +411,34 @@
 			}
 			
 			return $this->request($url, array('put'=>$put));
+		}
+
+		public function parseServer($raw) {
+			preg_match("#ec2_server_templates/([0-9]+)$#",$raw->server_template_href,$matches);
+			$server_template_id = $matches[1];
+			preg_match("#deployments/([0-9]+)$#",$raw->deployment_href,$matches);
+			$deployment_id = $matches[1];
+			preg_match("#/([0-9]+)(/current)?#",$raw->href,$matches);
+			$id = $matches[1];
+			$out = (object) array(
+					"server_template_id" => $server_template_id,
+					"deployment_id" => $deployment_id,
+					"name" => $raw->nickname,
+					"state" => $raw->state,
+					"inputs" => $this->parseInputs($raw),
+					"id" => $id
+					);
+			return $out;
+		}
+
+		public function parseInputs($raw) {
+			if(is_array($raw->parameters)) {
+				$inputs = new StdClass();
+				foreach($raw->parameters as $input) {
+					$inputs->{$input->name} = $input->value;
+				}
+				return $inputs;
+			}
+			return false;
 		}
 	}

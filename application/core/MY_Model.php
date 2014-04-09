@@ -20,4 +20,16 @@ class MY_Model extends CI_Model {
 
 		return $this->config->$name;
 	}
+
+	protected function saveConfig($name,$data) {
+		$name = strtolower($name);
+		$path = APPPATH . "/config/{$name}.json";
+		if(($json = json_encode($data)) === false) {
+			throw new Exception("error while encoding json");
+		}
+		if(file_put_contents($path,$json) === false) {
+			throw new Exception("error writing $path");
+		}
+		return true;
+	}
 }

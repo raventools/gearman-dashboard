@@ -1,9 +1,9 @@
 <?php
 
-class Instances_model extends CI_Model {
+class Instances_model extends MY_Model {
 
 	public function __construct() {
-		$this->load();	
+		$this->loadConfig("instances");
 	}
 
 	public function get($array_id,$instance_id=null) {
@@ -17,12 +17,9 @@ class Instances_model extends CI_Model {
 		return false;
 	}
 
-	private function load() {
-		if(($raw_instances = file_get_contents("application/config/instances.json")) === false) {
-			throw new Exception("failed to load master instance config");
-		}
-		if(($this->instances = json_decode($raw_instances)) === false) {
-			throw new Exception("invalid json detected in master instance config");
-		}
+	public function refresh() {
+		$this->load->model("rightscale_model");
+		$this->instances = $this->rightscale_model->instances();
+		$this->saveConfig("instances",$this->instances);
 	}
 }

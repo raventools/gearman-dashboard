@@ -1,9 +1,9 @@
 <?php
 
-class Arrays_model extends CI_Model {
+class Arrays_model extends MY_Model {
 
 	public function __construct() {
-		$this->load();	
+		$this->arrays = $this->loadConfig("arrays");
 	}
 
 	public function get($master_id, $array_id=null) {
@@ -17,12 +17,9 @@ class Arrays_model extends CI_Model {
 		return false;
 	}
 
-	private function load() {
-		if(($raw_arrays = file_get_contents("application/config/arrays.json")) === false) {
-			throw new Exception("failed to load master array config");
-		}
-		if(($this->arrays = json_decode($raw_arrays)) === false) {
-			throw new Exception("invalid json detected in master array config");
-		}
+	public function refresh() {
+		$this->load->model("rightscale_model");
+		$this->arrays = $this->rightscale_model->arrays();
+		$this->saveConfig("arrays",$this->arrays);
 	}
 }
