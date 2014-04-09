@@ -12,9 +12,11 @@ class Rightscale_model extends MY_Model {
 	public function masters() {
 		$masters = array();
 		$raw_servers = $this->rs->getServerByTags("server:type=gearman_master");
+
 		foreach($raw_servers as $raw) {
 			$parsed = $this->rs->parseServer($raw);
 			$details = $this->rs->getServerSettings($parsed->id);
+
 			$master = (object) array(
 					"id" => $parsed->id,
 					"public_ip" => $details->{"ip-address"},
@@ -22,6 +24,7 @@ class Rightscale_model extends MY_Model {
 					);
 			$masters[$parsed->name] = $master;
 		}
+
 		return $masters;
 	}
 
