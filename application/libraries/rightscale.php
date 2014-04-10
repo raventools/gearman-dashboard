@@ -19,9 +19,6 @@
 			$this->login($username, $password);
 			$this->url_base = "https://my.rightscale.com/api/acct/{$this->account}/";
 
-			$this->debug = true; // remove this
-
-			
 			parent::__construct();
 		}
 
@@ -119,7 +116,6 @@
 			$extra['get']['resource_type'] = "server_array";
 			$extra['get']['tags'] = $tags;
 			$url = "tags/search.{$this->format}";
-		//	$this->debug=true;
 			return $this->request($url,$extra);
 		}
 

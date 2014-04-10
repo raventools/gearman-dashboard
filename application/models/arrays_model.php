@@ -9,13 +9,11 @@ class Arrays_model extends MY_Model {
 		}
 	}
 
-	public function get($master_id, $array_id=null) {
-		if(!is_null($array_id) 
-				&& is_object($this->arrays->$master_id) 
-				&& is_object($this->arrays->$master_id->$array_id)) {
-			return $this->arrays->$master_id->$array_id;
-		} elseif(is_object($this->arrays->$master_id)) {
-			return $this->arrays->$master_id;
+	public function get($array_id=null) {
+		if(!is_null($array_id) && is_object($this->arrays) && is_object($this->arrays->$array_id)) {
+			return $this->arrays->$array_id;
+		} elseif(is_object($this->arrays)) {
+			return $this->arrays;
 		}
 		return false;
 	}
