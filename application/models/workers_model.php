@@ -12,8 +12,13 @@ class Workers_model extends MY_Model {
 		}
 	}
 
-	public function get($ip,$port,$worker_id=null) {
-		if($this->fetch($ip,$port) === false) {
+	public function get($master_id,$instance_id,$worker_id=null) {
+
+		$this->load->model("instances_model");
+		$instance = $this->instances_model->get($master_id,$instance_id);
+		$supervisord = $this->loadConfig("supervisord");
+//		if($this->fetch($instance->private_ip_address,$supervisord->port) === false) {
+		if($this->fetch("127.0.0.1",$supervisord->port) === false) {
 			return false;
 		}
 
@@ -28,8 +33,8 @@ class Workers_model extends MY_Model {
 	private function fetch($ip,$port) {
 		$supervisor = new SupervisorClient($ip,$port,$this->timeout);
 		try {
-			$auth = $this->loadConfig("supervisord");
-			if($supervisor->authenticate($auth->user,$auth->password) === false) {
+			$supervisord = $this->loadConfig("supervisord");
+			if($supervisor->authenticate($supervisord->username,$supervisord->password) === false) {
 				throw new Exception("invalid supervisor user/pass");
 			}
 		} catch(Exception $e) {
