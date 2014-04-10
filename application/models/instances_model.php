@@ -9,13 +9,11 @@ class Instances_model extends MY_Model {
 		}
 	}
 
-	public function get($array_id,$instance_id=null) {
-		if(!is_null($instance_id) && is_object($this->instances->$array_id) 
-				&& is_object($this->instances->$array_id->$instance_id)) {
-
-			return $this->instances->$array_id->$instance_id;
-		} elseif(is_object($this->instances) && is_object($this->instances->$array_id)) {
-			return $this->instances->$array_id;
+	public function get($master_private_ip=null) {
+		if(!is_null($master_private_ip) && is_object($this->instances->$master_private_ip)) {
+			return $this->instances->$master_private_ip;
+		} elseif(is_object($this->instances)) {
+			return $this->instances;
 		}
 		return false;
 	}

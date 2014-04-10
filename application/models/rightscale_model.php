@@ -64,7 +64,9 @@ class Rightscale_model extends MY_Model {
 
 		foreach($raw_instances as $raw) {
 			$parsed = $this->rs->parseServer($raw);
-			$instances[$parsed->name] = $parsed;
+			$parsed->master = gethostbyname(str_replace("text:","",$parsed->inputs->GEARMAN_SERVER_IP));
+			$parsed->metapackage = str_replace("text:","",$parsed->inputs->GEARMAN_WORKER_PACKAGE);
+			$instances->{$parsed->master}->{$parsed->name} = $parsed;
 		}
 		return $instances;
 	}

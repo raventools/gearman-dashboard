@@ -60,18 +60,14 @@ class GearmanDashboardAPI extends CI_Controller {
 	/**
 	 * given an array id, returns a list of server instances associated with a particular array
 	 */
-	public function Instances($array_id,$instance_id=null) {
+	public function Instances($master_private_ip=null) {
 		// TODO
 		// this is to allow spaces in id (just a name string).  Will probably need to short out
 		// CI's input validation, or use query string vars
-		$array_id = urldecode($array_id); 
-		if(!is_null($instance_id)) {
-			$instance_id = urldecode($instance_id); 
-		}
 
 		try {
 			$this->load->model("instances_model");
-			$instances = $this->instances_model->get($array_id,$instance_id);
+			$instances = $this->instances_model->get($master_private_ip);
 
 		} catch(Exception $e) {
 			$this->ERROR($e->getMessage());
