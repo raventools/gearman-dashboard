@@ -9,13 +9,14 @@ class Instances_model extends MY_Model {
 		}
 	}
 
-	public function get($array_id,$instance_id=null) {
-		if(!is_null($instance_id) && is_object($this->instances->$array_id) 
-				&& is_object($this->instances->$array_id->$instance_id)) {
-
-			return $this->instances->$array_id->$instance_id;
-		} elseif(is_object($this->instances) && is_object($this->instances->$array_id)) {
-			return $this->instances->$array_id;
+	public function get($master_id=null,$instance_id=null) {
+		if(!is_null($instance_id) && is_object($this->instances->$master_id)
+				&& is_object($this->instances->$master_id->$instance_id)) {
+			return $this->instances->$master_id->$instance_id;
+		} elseif(!is_null($master_id) && is_object($this->instances->$master_id)) {
+			return $this->instances->$master_id;
+		} elseif(is_object($this->instances)) {
+			return $this->instances;
 		}
 		return false;
 	}

@@ -81,6 +81,14 @@ attribute "gearman_dashboard/supervisord/password",
     :type => "string",
     :recipes => ["gearman_dashboard::default","gearman_dashboard::setup_supervisord"]
 
+attribute "gearman_dashboard/supervisord/port",
+    :display_name => "Supervisord port",
+    :description => "Supervisord port",
+    :required => "recommended",
+    :type => "string",
+	:default => "9110",
+    :recipes => ["gearman_dashboard::default","gearman_dashboard::setup_supervisord"]
+
 attribute "gearman_dashboard/deploy/repo",
     :display_name => "Git Repository URL",
     :description => "Git Repository URL",
