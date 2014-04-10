@@ -105,6 +105,24 @@ class GearmanDashboardAPI extends CI_Controller {
 	}
 
 	/**
+	 * retrieve queue status
+	 */
+	public function Queues($master_id) {
+		try {
+			$this->load->model("gearmand_model");
+			$queues = $this->gearmand_model->queues($master_id);
+		} catch(Exception $e) {
+			$this->ERROR($e->getMessage());
+		}
+
+		if($queues === false) {
+			$this->ERROR("Queues: not found");
+		} else {
+			$this->OK("Queues",$queues);
+		}
+	}
+
+	/**
 	 * refreshes cached json for one of (masters|arrays|instances) or all
 	 */
 	public function Refresh($module = "all") {
