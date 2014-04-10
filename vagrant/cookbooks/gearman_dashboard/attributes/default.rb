@@ -12,6 +12,7 @@ default[:gearman_dashboard][:rightscale][:password] = "12345"
 # supervisord
 default[:gearman_dashboard][:supervisord][:username] = "super"
 default[:gearman_dashboard][:supervisord][:password] = "12345"
+default[:gearman_dashboard][:supervisord][:port] = "9110"
 
 # deploy
 default[:gearman_dashboard][:deploy][:repo] = "git@github.com:raventools/gearman-dashboard.git"

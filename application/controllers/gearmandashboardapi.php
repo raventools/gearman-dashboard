@@ -34,9 +34,6 @@ class GearmanDashboardAPI extends CI_Controller {
 	 * return list of server arrays associated with a particular master server
 	 */
 	public function Arrays($array_id=null) {
-		// TODO
-		// this is to allow spaces in id (just a name string).  Will probably need to short out
-		// CI's input validation, or use query string vars
 		if(!is_null($array_id)) {
 			$array_id = urldecode($array_id); 
 		}
@@ -59,14 +56,11 @@ class GearmanDashboardAPI extends CI_Controller {
 	/**
 	 * given an array id, returns a list of server instances associated with a particular array
 	 */
-	public function Instances($master_private_ip=null) {
-		// TODO
-		// this is to allow spaces in id (just a name string).  Will probably need to short out
-		// CI's input validation, or use query string vars
+	public function Instances($master_id=null,$instance_id=null) {
 
 		try {
 			$this->load->model("instances_model");
-			$instances = $this->instances_model->get($master_private_ip);
+			$instances = $this->instances_model->get($master_id,$instance_id);
 
 		} catch(Exception $e) {
 			$this->ERROR($e->getMessage());
@@ -82,24 +76,23 @@ class GearmanDashboardAPI extends CI_Controller {
 	/**
 	 * given an instance id, returns list of gearman client workers 
 	 */
-	public function Workers($array_id,$instance_id,$worker_id=null) {
-		$array_id = urldecode($array_id); 
+	public function Workers($master_id,$instance_id,$worker_id=null) {
+		$master_id = urldecode($master_id); 
 		$instance_id = urldecode($instance_id); 
 		if(!is_null($worker_id)) {
 			$worker_id = urldecode($worker_id); 
 		}
 
 		try {
-			$this->load->model("instances_model");
 			$this->load->model("workers_model");
-			$instance = $this->instances_model->get($array_id,$instance_id);
-			$workers = $this->workers_model->get($instance->priv_ip,$instance->port,$worker_id);
+			$workers = $this->workers_model->get($master_id,$instance_id,$worker_id);
 		} catch(Exception $e) {
 			$this->ERROR($e->getMessage());
 		}
 
 		if($workers === false) {
-			$this->ERROR("Workers: not found",array("instance"=>$instance));
+			$this->ERROR("Workers: not found",
+					array("master_id"=>$master_id,"instance_id"=>$instance_id,"worker_id"=>$worker_id));
 		} else {
 			$this->OK("Workers",array("instance"=>$instance,"workers"=>$workers));
 		}

@@ -9,9 +9,12 @@ class Instances_model extends MY_Model {
 		}
 	}
 
-	public function get($master_private_ip=null) {
-		if(!is_null($master_private_ip) && is_object($this->instances->$master_private_ip)) {
-			return $this->instances->$master_private_ip;
+	public function get($master_id=null,$instance_id=null) {
+		if(!is_null($instance_id) && is_object($this->instances->$master_id)
+				&& is_object($this->instances->$master_id->$instance_id)) {
+			return $this->instances->$master_id->$instance_id;
+		} elseif(!is_null($master_id) && is_object($this->instances->$master_id)) {
+			return $this->instances->$master_id;
 		} elseif(is_object($this->instances)) {
 			return $this->instances;
 		}
