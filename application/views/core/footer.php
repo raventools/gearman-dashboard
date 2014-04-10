@@ -22,7 +22,7 @@
 
     <!-- Models -->
 	<script src="/assets/js/models/errors.js"></script>    
-	<script src="/assets/js/models/metapackage.js"></script>    
+	<script src="/assets/js/models/metapackages.js"></script>    
 	<script src="/assets/js/models/processes.js"></script>    
 	<script src="/assets/js/models/servers.js"></script>    
 	<script src="/assets/js/models/workers.js"></script>    

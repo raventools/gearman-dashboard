@@ -163,6 +163,54 @@ class Dashboard_model extends CI_Model {
 				);
 
 				break;
+
+			case 'getPackages':
+				$response = array(
+					'status' => 'OK',
+					'detail' => 'Packages',
+
+					'data' => array(
+						'test/package/1' => array(
+							'queued' => 12,
+							'active' => 20,
+							'workers' => 20
+						),
+						'test/package/2' => array(
+							'queued' => 0,
+							'active' => 10,
+							'workers' => 40
+						),
+						'test/package/3' => array(
+							'queued' => 142,
+							'active' => 60,
+							'workers' => 60
+						)
+					)
+				);
+
+				break;
+
+			case 'getWorkersServers':
+				$response = array(
+					'status' => 'OK',
+					'detail' => 'Workers -> Servers',
+
+					'data' => array(
+						'Test Server 1' => array(
+							'metapackages' => 'pie,beer,foods',
+							'worker_count' => 20,
+							'public_ip' => '127.0.0.1'
+						),
+						'Test Server 2' => array(
+							'metapackages' => 'shuffleboard,tv',
+							'worker_count' => 50,
+							'public_ip' => '127.0.0.1'
+						)
+					)
+				);
+
+				break;
+
 		}
 
 		return $response;

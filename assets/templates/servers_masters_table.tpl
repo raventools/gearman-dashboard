@@ -1,8 +1,8 @@
 
-	<div class="col-md-6">
+	<div class="col-md-9">
 		<h4>Master Servers</h4>
 
-		<table id="servers_by_health" class="table table-bordered">
+		<table id="servers_masters" class="table table-bordered">
 			<thead>
 				<th>Server Name</th>
 				<th>ID</th>

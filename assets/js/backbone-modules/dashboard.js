@@ -7,10 +7,12 @@ var Dashboard = {
 		'metapackages' : 'Metapackages',
 
 		'workers' : 'Workers',
+		/*
 		'workers/running' : 'Workers',
 		'workers/idle' : 'Workers',
 		'workers/package' : 'Workers',
 		'workers/worker/:worker_id' : 'Workers',
+		*/
 
 		'processes' : 'Processes',
 
@@ -21,7 +23,7 @@ var Dashboard = {
 };
 
 Dashboard.Servers = function (filter_type, filter_id) {
-	RouteHelper.init();
+	RouteHelper.init('servers');
 
 	if (fn.empty(filter_type)) {
 		filter_type = 'all';
@@ -31,10 +33,6 @@ Dashboard.Servers = function (filter_type, filter_id) {
 		filter_id = 0;
 	}
 
-	var base_content = TemplateHelper.renderTemplate('servers');
-
-	RouteHelper.appendContent(base_content);
-
 	if (filter_id == 0) {
 		Models.Servers.getMasters({}, function (data) {
 			var content = TemplateHelper.renderTemplate('servers_masters_table', data.data);
@@ -42,42 +40,32 @@ Dashboard.Servers = function (filter_type, filter_id) {
 			RouteHelper.appendContent(content, '#list_masters');
 		});
 
-		Models.Servers.getInstances({
-			'instance_id' : 6950
-		}, function (data) {
-			console.log('instances data: ', data);
+		Models.Servers.getInstances({}, function (data) {
+			var content = TemplateHelper.renderTemplate('servers_instances_table', data.data);
+
+			RouteHelper.appendContent(content, '#list_instances');
 		});
-
-		/*
-		Models.Servers.getServersSummary({}, function (data) {
-			data.title = 'Overall Summary';
-
-			var content = TemplateHelper.renderTemplate('servers_summary', data);
-
-			RouteHelper.prependContent(content);
-		});
-
-		Models.Servers.getServersByHealth({}, function (data) {
-			var content = TemplateHelper.renderTemplate('servers_by_health', data);
-
-			RouteHelper.appendContent(content, '#table_holder');
-		});	
-
-		Models.Servers.getServersByWorkers({}, function (data) {
-			var content = TemplateHelper.renderTemplate('servers_by_workers', data);
-
-			RouteHelper.appendContent(content, '#table_holder');
-		});
-		*/
 	}
 };
 
 Dashboard.Metapackages = function () {
-	RouteHelper.changeContent('Metapackages page');
+	RouteHelper.init('metapackages');
+
+	Models.Metapackages.getPackages({}, function (data) {
+		var content = TemplateHelper.renderTemplate('metapackages_packages_table', data.data);
+
+		RouteHelper.appendContent(content, '#list_packages');
+	});
 };
 
 Dashboard.Workers = function (filter_type) {
-	RouteHelper.changeContent('Workers page');
+	RouteHelper.init('workers');
+
+	Models.Workers.getServers({}, function (data) {
+		var content = TemplateHelper.renderTemplate('workers_servers_table', data.data);
+
+		RouteHelper.appendContent(content, '#list_servers');
+	});
 };
 
 Dashboard.Processes = function () {

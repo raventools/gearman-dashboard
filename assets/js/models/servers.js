@@ -1,9 +1,9 @@
 Models.Servers = {
 	'endpoint' : '/dashboard/api', // dummy endpoint
-	'api_endpoint' : '/gearmandashboardapi/',
+	'api_endpoint' : '/gearmandashboardapi',
 
 	'getMasters' : function (options, callback) {
-		Request.get(this.api_endpoint + 'masters', {}, function (response) {
+		Request.get(this.api_endpoint + '/masters', {}, function (response) {
 			var formatted_data = [];
 
 			_.each(response.data, function (value, key) {
@@ -21,7 +21,17 @@ Models.Servers = {
 	},
 
 	'getInstances' : function (options, callback) {
-		Request.get(this.api_endpoint + 'instances/' + options.instance_id, function (response) {
+		Request.get(this.api_endpoint + '/instances', function (response) {
+			var formatted_data = [];
+
+			_.each(response.data, function (value, key) {
+				value['name'] = key;
+
+				formatted_data.push(value);
+			});
+
+			response.data.servers = formatted_data;
+
 			if (_.isFunction(callback)) {
 				callback(response);
 			}
