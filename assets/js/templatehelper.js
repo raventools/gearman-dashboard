@@ -34,3 +34,14 @@ TemplateHelper.renderTemplate = function (template_name, data) {
 
 	return content;
 };
+
+/**
+ * Handlebars Helpers
+ **/
+Handlebars.registerHelper('getDataValue', function(key, obj) {
+	if (fn.empty(obj) || !_.isObject(obj)) {
+		return '';
+	}
+	
+	return obj[key];
+});

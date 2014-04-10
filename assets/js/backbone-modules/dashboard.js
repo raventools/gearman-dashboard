@@ -31,18 +31,27 @@ Dashboard.Servers = function (filter_type, filter_id) {
 		filter_id = 0;
 	}
 
-	Models.Servers.getMasters({}, function (data) {
-		console.log('masters data: ', data);
-	});
+	var base_content = TemplateHelper.renderTemplate('servers');
 
-	Models.Servers.getInstances({}, function (data) {
-		console.log('instances data: ', data);
-	});
+	RouteHelper.appendContent(base_content);
 
 	if (filter_id == 0) {
-		RouteHelper.appendContent($('<div class="row" id="table_holder" />'));
+		Models.Servers.getMasters({}, function (data) {
+			var content = TemplateHelper.renderTemplate('servers_masters_table', data.data);
 
+			RouteHelper.appendContent(content, '#list_masters');
+		});
+
+		Models.Servers.getInstances({
+			'instance_id' : 6950
+		}, function (data) {
+			console.log('instances data: ', data);
+		});
+
+		/*
 		Models.Servers.getServersSummary({}, function (data) {
+			data.title = 'Overall Summary';
+
 			var content = TemplateHelper.renderTemplate('servers_summary', data);
 
 			RouteHelper.prependContent(content);
@@ -59,6 +68,7 @@ Dashboard.Servers = function (filter_type, filter_id) {
 
 			RouteHelper.appendContent(content, '#table_holder');
 		});
+		*/
 	}
 };
 
