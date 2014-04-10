@@ -14,10 +14,10 @@ class GearmanDashboardAPI extends CI_Controller {
 	/**
 	 * return list of gearmand master servers
 	 */
-	public function Masters() {
+	public function Masters($master_id=null) {
 		try {
 			$this->load->model("masters_model");
-			$masters = $this->masters_model->get();
+			$masters = $this->masters_model->get($master_id);
 		} catch(Exception $e) {
 			$this->ERROR($e->getMessage());
 		}
@@ -33,18 +33,17 @@ class GearmanDashboardAPI extends CI_Controller {
 	 * given a master server id, 
 	 * return list of server arrays associated with a particular master server
 	 */
-	public function Arrays($master_id,$array_id=null) {
+	public function Arrays($array_id=null) {
 		// TODO
 		// this is to allow spaces in id (just a name string).  Will probably need to short out
 		// CI's input validation, or use query string vars
-		$master_id = urldecode($master_id); 
 		if(!is_null($array_id)) {
 			$array_id = urldecode($array_id); 
 		}
 
 		try {
 			$this->load->model("arrays_model");
-			$arrays = $this->arrays_model->get($master_id,$array_id);
+			$arrays = $this->arrays_model->get($array_id);
 
 		} catch(Exception $e) {
 			$this->ERROR($e->getMessage());
