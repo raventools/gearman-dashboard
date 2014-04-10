@@ -17,8 +17,7 @@ class Workers_model extends MY_Model {
 		$this->load->model("instances_model");
 		$instance = $this->instances_model->get($master_id,$instance_id);
 		$supervisord = $this->loadConfig("supervisord");
-//		if($this->fetch($instance->private_ip_address,$supervisord->port) === false) {
-		if($this->fetch("127.0.0.1",$supervisord->port) === false) {
+		if($this->fetch($instance->private_ip_address,$supervisord->port) === false) {
 			return false;
 		}
 

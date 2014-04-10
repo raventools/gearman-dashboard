@@ -94,7 +94,13 @@ class GearmanDashboardAPI extends CI_Controller {
 			$this->ERROR("Workers: not found",
 					array("master_id"=>$master_id,"instance_id"=>$instance_id,"worker_id"=>$worker_id));
 		} else {
-			$this->OK("Workers",array("instance"=>$instance,"workers"=>$workers));
+			$this->OK("Workers",
+					array(
+						"master_id"=>$master_id,
+						"instance_id"=>$instance_id,
+						"worker_id"=>$worker_id,
+						"workers"=>$workers
+						));
 		}
 	}
 
