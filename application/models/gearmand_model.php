@@ -2,6 +2,7 @@
 
 class Gearmand_model extends MY_Model {
 
+	public static $timeout = 10;
 
 	public function queues($master_id) {
 
@@ -25,9 +26,9 @@ class Gearmand_model extends MY_Model {
 		$this->load->model("masters_model");
 		$master = $this->masters_model->get($master_id);
 
-		$this->conn = @fsockopen($master->private_ip, $master->port, $errCode, $errMsg, $timeout);
+		$this->conn = @fsockopen($master->private_ip, $master->port, $errCode, $errMsg, self::$timeout);
 		if ($this->conn === false) {
-			error_log("error connecting to gearmand $master_id ip:{$master->private_ip}");
+			error_log("error connecting to gearmand $master_id ip:{$master->private_ip} [{$errCode}:{$errMsg}]");
 			return false;
 		}
 
