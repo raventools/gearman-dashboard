@@ -1,9 +1,19 @@
 Models.Servers = {
-	'endpoint' : '/dashboard/api', // dummy endpoint
-	'api_endpoint' : '/gearmandashboardapi/',
+	'endpoint' : Endpoints.dummy_endpoint,
+	'api_endpoint' : Endpoints.endpoint,
 
 	'getMasters' : function (options, callback) {
-		Request.get(this.api_endpoint + 'masters', {}, function (response) {
+		Request.get(this.api_endpoint + '/masters', {}, function (response) {
+			var formatted_data = [];
+
+			_.each(response.data, function (value, key) {
+				value['name'] = key;
+
+				formatted_data.push(value);
+			});
+
+			response.data.servers = formatted_data;
+
 			if (_.isFunction(callback)) {
 				callback(response);
 			}
@@ -11,7 +21,17 @@ Models.Servers = {
 	},
 
 	'getInstances' : function (options, callback) {
-		Request.get(this.api_endpoint + 'instances', {}, function (response) {
+		Request.get(this.api_endpoint + '/instances', function (response) {
+			var formatted_data = [];
+
+			_.each(response.data, function (value, key) {
+				value['name'] = key;
+
+				formatted_data.push(value);
+			});
+
+			response.data.servers = formatted_data;
+
 			if (_.isFunction(callback)) {
 				callback(response);
 			}

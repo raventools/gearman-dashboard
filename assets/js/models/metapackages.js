@@ -1,10 +1,10 @@
-Models.Workers = {
+Models.Metapackages = {
 	'endpoint' : Endpoints.dummy_endpoint,
 	'api_endpoint' : Endpoints.endpoint,
 
-	'getServers' : function (options, callback) {
+	'getPackages' : function (options, callback) {
 		Request.get(this.endpoint, {
-			'method' : 'getWorkersServers'
+			'method' : 'getPackages'
 		}, function (response) {
 			var formatted_data = [];
 
@@ -14,7 +14,7 @@ Models.Workers = {
 				formatted_data.push(value);
 			});
 
-			response.data.servers = formatted_data;
+			response.data.packages = formatted_data;
 
 			if (_.isFunction(callback)) {
 				callback(response);

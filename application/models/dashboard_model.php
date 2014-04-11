@@ -163,6 +163,111 @@ class Dashboard_model extends CI_Model {
 				);
 
 				break;
+
+			case 'getPackages':
+				$response = array(
+					'status' => 'OK',
+					'detail' => 'Packages',
+
+					'data' => array(
+						'test/package/1' => array(
+							'queued' => 12,
+							'active' => 20,
+							'workers' => 20
+						),
+						'test/package/2' => array(
+							'queued' => 0,
+							'active' => 10,
+							'workers' => 40
+						),
+						'test/package/3' => array(
+							'queued' => 142,
+							'active' => 60,
+							'workers' => 60
+						)
+					)
+				);
+
+				break;
+
+			case 'getWorkersServers':
+				$response = array(
+					'status' => 'OK',
+					'detail' => 'Workers -> Servers',
+
+					'data' => array(
+						'Test Server 1' => array(
+							'metapackages' => 'pie,beer,foods',
+							'worker_count' => 20,
+							'public_ip' => '127.0.0.1'
+						),
+						'Test Server 2' => array(
+							'metapackages' => 'shuffleboard,tv',
+							'worker_count' => 50,
+							'public_ip' => '127.0.0.1'
+						)
+					)
+				);
+
+				break;
+
+			case 'getErrorsAll':
+				$response = array(
+					'status' => 'OK',
+					'detail' => 'Errors',
+
+					'data' => array(
+						array(
+							'message' => 'Unexpected right lane in left lane on line q.',
+							'server_name' => 'Test Server 1',
+							'ts' => '03/17/2014 02:03:04'
+						),
+						array(
+							'message' => 'Missing id to identify the thing for the action.',
+							'server_name' => 'Test Server 4',
+							'ts' => '04/02/2014 03:04:05'
+						),
+						array(
+							'message' => 'Terrible exception message. No excuse.',
+							'server_name' => 'Test Server 2',
+							'ts' => '02/02/2014 04:05:06'
+						)
+					)
+				);
+
+				break;
+
+			case 'getProcessesAll':
+				$response = array(
+					'status' => 'OK',
+					'detail' => 'Processes',
+
+					'data' => array(
+						array(
+							'description' => 'pid 31099, uptime 0:52:43',
+							'status' => 'RUNNING',
+							'pid' => '31099',
+							'server_id' => '13933966001',
+							'ts' => '03/17/2014 02:03:04'
+						),
+						array(
+							'description' => 'pid 31089, uptime 0:52:43',
+							'status' => 'RUNNING',
+							'pid' => '31089',
+							'server_id' => '13933966001',
+							'ts' => '03/17/2014 02:03:04'
+						),
+						array(
+							'description' => 'pid 31079, uptime 0:52:43',
+							'status' => 'RUNNING',
+							'pid' => '31079',
+							'server_id' => '13933966001',
+							'ts' => '03/17/2014 02:03:04'
+						)
+					)
+				);
+
+				break;
 		}
 
 		return $response;

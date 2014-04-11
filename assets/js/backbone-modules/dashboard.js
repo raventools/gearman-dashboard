@@ -7,10 +7,12 @@ var Dashboard = {
 		'metapackages' : 'Metapackages',
 
 		'workers' : 'Workers',
+		/*
 		'workers/running' : 'Workers',
 		'workers/idle' : 'Workers',
 		'workers/package' : 'Workers',
 		'workers/worker/:worker_id' : 'Workers',
+		*/
 
 		'processes' : 'Processes',
 
@@ -21,7 +23,7 @@ var Dashboard = {
 };
 
 Dashboard.Servers = function (filter_type, filter_id) {
-	RouteHelper.init();
+	RouteHelper.init('servers');
 
 	if (fn.empty(filter_type)) {
 		filter_type = 'all';
@@ -31,54 +33,68 @@ Dashboard.Servers = function (filter_type, filter_id) {
 		filter_id = 0;
 	}
 
-	Models.Servers.getMasters({}, function (data) {
-		console.log('masters data: ', data);
-	});
-
-	Models.Servers.getInstances({}, function (data) {
-		console.log('instances data: ', data);
-	});
-
 	if (filter_id == 0) {
-		RouteHelper.appendContent($('<div class="row" id="table_holder" />'));
+		Models.Servers.getMasters({}, function (data) {
+			var content = TemplateHelper.renderTemplate('servers_masters_table', data.data);
 
-		Models.Servers.getServersSummary({}, function (data) {
-			var content = TemplateHelper.renderTemplate('servers_summary', data);
-
-			RouteHelper.prependContent(content);
+			RouteHelper.appendContent(content, '#list_masters');
 		});
 
-		Models.Servers.getServersByHealth({}, function (data) {
-			var content = TemplateHelper.renderTemplate('servers_by_health', data);
+		Models.Servers.getInstances({}, function (data) {
+			var content = TemplateHelper.renderTemplate('servers_instances_table', data.data);
 
-			RouteHelper.appendContent(content, '#table_holder');
-		});	
-
-		Models.Servers.getServersByWorkers({}, function (data) {
-			var content = TemplateHelper.renderTemplate('servers_by_workers', data);
-
-			RouteHelper.appendContent(content, '#table_holder');
+			RouteHelper.appendContent(content, '#list_instances');
 		});
 	}
 };
 
 Dashboard.Metapackages = function () {
-	RouteHelper.changeContent('Metapackages page');
+	RouteHelper.init('metapackages');
+
+	Models.Metapackages.getPackages({}, function (data) {
+		var content = TemplateHelper.renderTemplate('metapackages_packages_table', data.data);
+
+		RouteHelper.appendContent(content, '#list_packages');
+	});
 };
 
 Dashboard.Workers = function (filter_type) {
-	RouteHelper.changeContent('Workers page');
+	RouteHelper.init('workers');
+
+	Models.Workers.getServers({}, function (data) {
+		var content = TemplateHelper.renderTemplate('workers_servers_table', data.data);
+
+		RouteHelper.appendContent(content, '#list_servers');
+	});
 };
 
 Dashboard.Processes = function () {
-	RouteHelper.changeContent('Processes page');
+	RouteHelper.init('processes');
+
+	Models.Processes.getProcesses({}, function (data) {
+		var content = TemplateHelper.renderTemplate('processes_all_table', data.data);
+
+		RouteHelper.appendContent(content, '#list_processes_all');
+	});
 };
 
 Dashboard.Errors = function () {
-	RouteHelper.changeContent('Errors page');
+	RouteHelper.init('errors');
+
+	Models.Errors.getErrors({}, function (data) {
+		var content = TemplateHelper.renderTemplate('errors_all_table', data.data);
+
+		RouteHelper.appendContent(content, '#list_errors_all');
+	});
 };
 
-Dashboard.Default = function () {
+Dashboard.Default = function (path) {
+	if (_.isNull(path)) {
+		RouteHelper.navigate('servers');		
+
+		return false;
+	}
+
 	RouteHelper.changeContent('Whoops, no page here.');	
 };
 

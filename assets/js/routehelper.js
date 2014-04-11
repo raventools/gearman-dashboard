@@ -2,10 +2,21 @@ var Routes = {},
 	RouteHelper = {};
 
 RouteHelper.container = $('#backbone_container');
+RouteHelper.navigation = $('#dashboard_nav');
+
+RouteHelper.router = null;
 
 /* perform initializing actions, such as clearing the content area */
-RouteHelper.init = function () {
+RouteHelper.init = function (route_name) {
 	(RouteHelper.container).html('<div class="loader-animation"><img src="/assets/img/loading.gif" /></div>');
+
+	if (!fn.empty(route_name)) {
+		RouteHelper.highlightNav(route_name);
+
+		var base_content = TemplateHelper.renderTemplate(route_name);
+
+		RouteHelper.appendContent(base_content);
+	}
 };
 
 RouteHelper.clearLoader = function () {
@@ -17,9 +28,15 @@ RouteHelper.addRoute = function (name, route_definition) {
 };
 
 RouteHelper.loadRoute = function (name) {
-	new Routes[name]; // crazy, i know
+	RouteHelper.router = new Routes[name]; // crazy, i know
 
 	Backbone.history.start();
+};
+
+RouteHelper.navigate = function (destination) {
+	(RouteHelper.router).navigate(destination, {
+		trigger: true
+	});
 };
 
 RouteHelper.changeContent = function (content) {
@@ -47,4 +64,13 @@ RouteHelper.prependContent = function (content) {
 	RouteHelper.clearLoader();
 
 	(RouteHelper.container).prepend(content);
+};
+
+RouteHelper.highlightNav = function (route_name) {
+	var this_nav = $(RouteHelper.navigation),
+		this_nav_item = this_nav.find('li.nav-' + route_name),
+		other_nav_items = this_nav.find('li.nav-item').not(this_nav_item);
+
+	other_nav_items.removeClass('active');
+	this_nav_item.addClass('active');	
 };
