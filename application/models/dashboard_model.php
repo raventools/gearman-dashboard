@@ -211,6 +211,31 @@ class Dashboard_model extends CI_Model {
 
 				break;
 
+			case 'getErrorsAll':
+				$response = array(
+					'status' => 'OK',
+					'detail' => 'Errors',
+
+					'data' => array(
+						array(
+							'message' => 'Unexpected right lane in left lane on line q.',
+							'server_name' => 'Test Server 1',
+							'ts' => '03/17/2014 02:03:04'
+						),
+						array(
+							'message' => 'Missing id to identify the thing for the action.',
+							'server_name' => 'Test Server 4',
+							'ts' => '04/02/2014 03:04:05'
+						),
+						array(
+							'message' => 'Terrible exception message. No excuse.',
+							'server_name' => 'Test Server 2',
+							'ts' => '02/02/2014 04:05:06'
+						)
+					)
+				);
+
+				break;
 		}
 
 		return $response;

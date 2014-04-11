@@ -69,14 +69,28 @@ Dashboard.Workers = function (filter_type) {
 };
 
 Dashboard.Processes = function () {
+	RouteHelper.init('processes');
+
 	RouteHelper.changeContent('Processes page');
 };
 
 Dashboard.Errors = function () {
-	RouteHelper.changeContent('Errors page');
+	RouteHelper.init('errors');
+
+	Models.Errors.getErrors({}, function (data) {
+		var content = TemplateHelper.renderTemplate('errors_all_table', data.data);
+
+		RouteHelper.appendContent(content, '#list_errors_all');
+	});
 };
 
-Dashboard.Default = function () {
+Dashboard.Default = function (path) {
+	if (_.isNull(path)) {
+		RouteHelper.navigate('servers');		
+
+		return false;
+	}
+
 	RouteHelper.changeContent('Whoops, no page here.');	
 };
 

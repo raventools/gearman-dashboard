@@ -21,11 +21,11 @@
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="dashboard_nav">
 	      <ul class="nav navbar-nav">
-	        <li><a href="#servers">Servers</a></li>
-	        <li><a href="#metapackages">Metapackages</a></li>
-	        <li><a href="#workers">Workers</a></li>
-	        <li><a href="#processes">Processes</a></li>
-	        <li><a href="#errors">Errors/Exceptions</a></li>
+	        <li class="nav-item nav-servers"><a href="#servers">Servers</a></li>
+	        <li class="nav-item nav-metapackages"><a href="#metapackages">Metapackages</a></li>
+	        <li class="nav-item nav-workers"><a href="#workers">Workers</a></li>
+	        <li class="nav-item nav-processes"><a href="#processes">Processes</a></li>
+	        <li class="nav-item nav-errors"><a href="#errors">Errors/Exceptions</a></li>
 	      </ul>
 	      
 	    </div><!-- /.navbar-collapse -->
