@@ -236,6 +236,38 @@ class Dashboard_model extends CI_Model {
 				);
 
 				break;
+
+			case 'getProcessesAll':
+				$response = array(
+					'status' => 'OK',
+					'detail' => 'Processes',
+
+					'data' => array(
+						array(
+							'description' => 'pid 31099, uptime 0:52:43',
+							'status' => 'RUNNING',
+							'pid' => '31099',
+							'server_id' => '13933966001',
+							'ts' => '03/17/2014 02:03:04'
+						),
+						array(
+							'description' => 'pid 31089, uptime 0:52:43',
+							'status' => 'RUNNING',
+							'pid' => '31089',
+							'server_id' => '13933966001',
+							'ts' => '03/17/2014 02:03:04'
+						),
+						array(
+							'description' => 'pid 31079, uptime 0:52:43',
+							'status' => 'RUNNING',
+							'pid' => '31079',
+							'server_id' => '13933966001',
+							'ts' => '03/17/2014 02:03:04'
+						)
+					)
+				);
+
+				break;
 		}
 
 		return $response;

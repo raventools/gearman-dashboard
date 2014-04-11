@@ -11,6 +11,9 @@
     <!-- Common methods -->
     <script src="/assets/js/fn.js"></script>
 
+    <!-- API Endpoint URL abstractions (to include a dummy endpoint) -->
+    <script src="/assets/js/endpoints.js"></script>    
+
     <!-- Backbone route helper (abstraction) -->
     <script src="/assets/js/routehelper.js"></script>
 

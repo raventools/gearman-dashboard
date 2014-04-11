@@ -71,7 +71,11 @@ Dashboard.Workers = function (filter_type) {
 Dashboard.Processes = function () {
 	RouteHelper.init('processes');
 
-	RouteHelper.changeContent('Processes page');
+	Models.Processes.getProcesses({}, function (data) {
+		var content = TemplateHelper.renderTemplate('processes_all_table', data.data);
+
+		RouteHelper.appendContent(content, '#list_processes_all');
+	});
 };
 
 Dashboard.Errors = function () {

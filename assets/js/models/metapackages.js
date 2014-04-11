@@ -1,6 +1,6 @@
 Models.Metapackages = {
-	'endpoint' : '/dashboard/api', // dummy endpoint
-	'api_endpoint' : '/gearmandashboardapi',
+	'endpoint' : Endpoints.dummy_endpoint,
+	'api_endpoint' : Endpoints.endpoint,
 
 	'getPackages' : function (options, callback) {
 		Request.get(this.endpoint, {

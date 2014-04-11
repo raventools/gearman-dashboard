@@ -1,6 +1,6 @@
 Models.Workers = {
-	'endpoint' : '/dashboard/api', // dummy endpoint
-	'api_endpoint' : '/gearmandashboardapi',
+	'endpoint' : Endpoints.dummy_endpoint,
+	'api_endpoint' : Endpoints.endpoint,
 
 	'getServers' : function (options, callback) {
 		Request.get(this.endpoint, {
