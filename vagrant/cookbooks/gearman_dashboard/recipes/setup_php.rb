@@ -8,7 +8,8 @@ package "php53u-pecl-memcache"
 package "php53u-mbstring"
 package "php53u-pecl-imagick"
 package "php53u-xml"
-#
+package "php53u-xmlrpc"
+
 # generates php conf overrides
 template "/etc/php.d/custom.ini" do
 	source "php.ini.erb"

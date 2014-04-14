@@ -391,6 +391,15 @@
 			return $this->request($url);
 		}
 
+		function getArrayInstanceSketchy($base,$token,$start,$end,$name,$type) {
+			$old_base = $this->url_base;
+			$this->url_base = "https://my.rightscale.com/";
+			$url = "{$base}/plugins/{$name}/views/{$type}.json?tok={$token}&start={$start}&end={$end}";
+			$response = $this->request($url);
+			$this->url_base = $old_base;
+			return $response;
+		}
+
 		function updateInputs($level,$id,$inputs,$current=false)
 		{
 			switch($level)

@@ -1,5 +1,8 @@
 {
-	"Gearman Server": {
+	"1": {
+		"name": "Gearman Server",
+		"id": "1",
+		"private_ip": "127.0.0.1",
 		"public_ip": "127.0.0.1",
 		"port": 4730
 	}

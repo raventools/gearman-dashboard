@@ -18,6 +18,11 @@ class Masters_model extends MY_Model {
 		return false;
 	}
 
+	public function graphs($id) {
+		$this->load->model("rightscale_model");
+		return $this->rightscale_model->masterGraphs($id);
+	}
+
 	public function refresh() {
 		$this->load->model("rightscale_model");
 		$this->servers = $this->rightscale_model->masters();

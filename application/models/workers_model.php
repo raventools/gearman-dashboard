@@ -21,9 +21,9 @@ class Workers_model extends MY_Model {
 			return false;
 		}
 
-		if(!is_null($worker_id) && is_object($this->workers[$worker_id])) {
-			return $this->workers[$worker_id];
-		} elseif(is_array($this->workers)) {
+		if(!is_null($worker_id) && is_object($this->workers->{$worker_id})) {
+			return $this->workers->{$worker_id};
+		} elseif(is_object($this->workers)) {
 			return $this->workers;
 		}
 		return false;
@@ -39,7 +39,8 @@ class Workers_model extends MY_Model {
 		} catch(Exception $e) {
 			error_log("supervisor auth exception ".$e->getMessage());
 		}
-		$this->workers = array();
+		$this->workers = new StdClass();
+		$count = 0;
 		$all_procs = $supervisor->getAllProcessInfo();
 		if(is_null($all_procs)) {
 			return false;
@@ -47,9 +48,16 @@ class Workers_model extends MY_Model {
 		foreach($all_procs as $proc) {
 			$proc = (object)$proc;
 			if($proc->group == self::$gearman_worker_group) {
-				$this->workers[] = $proc;
+				$this->workers->{$proc->pid} = $proc;
+				$count++;
 			}
 		}
-		return (count($this->workers) > 0 ? true : false);
+		return ($count > 0 ? $this->workers : false);
+	}
+
+	private function getRegisteredWorkers($master_id,$ip) {
+		$this->load->model("gearmand_model");
+		$registered = $this->gearmand_model->workers($master_id);
+		return $registered->{$ip};
 	}
 }

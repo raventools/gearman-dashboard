@@ -21,6 +21,12 @@ class Instances_model extends MY_Model {
 		return false;
 	}
 
+	public function graphs($master_id,$instance_id) {
+        $this->load->model("rightscale_model");
+		$instance = $this->instances->{$master_id}->{$instance_id};
+		return $this->rightscale_model->instanceGraphs($instance->sketchy_base,$instance->sketchy_token);
+	}
+
 	public function refresh() {
 		$this->load->model("rightscale_model");
 		$this->instances = $this->rightscale_model->instances();
