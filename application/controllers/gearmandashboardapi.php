@@ -123,6 +123,28 @@ class GearmanDashboardAPI extends CI_Controller {
 	}
 
 	/**
+	 * retrieve graphs for master servers or array instances
+	 */
+	public function Graphs($type,$master_id,$instance_id=null) {
+		switch($type) {
+			case "master":
+				$this->load->model("masters_model");
+				$graphs = $this->masters_model->graphs($master_id);
+				break;
+			case "instance":
+				$this->load->model("instances_model");
+				$graphs = $this->instances_model->graphs($master_id,$instance_id);
+				break;
+		}
+
+		if($graphs === false) {
+			$this->ERROR("Graphs: not found");
+		} else {
+			$this->OK("Graphs",$graphs);
+		}
+	}
+
+	/**
 	 * refreshes cached json for one of (masters|arrays|instances) or all
 	 */
 	public function Refresh($module = "all") {

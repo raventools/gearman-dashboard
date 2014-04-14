@@ -19,6 +19,19 @@ class Gearmand_model extends MY_Model {
 	}
 
 	public function workers($master_id) {
+		$this->workers = new StdClass();
+		$lines = $this->command($master_id,"workers");
+
+		foreach($lines as $line) {
+			$worker = new StdClass();
+			list($info, $endpoints) = explode(" : ", $line);
+			list($worker->fd, $worker->ip, $worker->id) = explode(" ", $info);
+			$worker->endpoints = explode(" ",$endpoints);
+
+			$this->workers->{$worker->ip}[] = $worker;
+		}
+
+		return $this->workers;
 	}
 
 	private function command($master_id,$cmd) {
