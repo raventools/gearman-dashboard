@@ -25,3 +25,7 @@ default[:gearman_dashboard][:php_conf] = [
 	"error_log = /var/log/httpd/php_error_log",
 	"date.timezone = US/Eastern"
 	]
+
+# attachments
+default[:gearman_dashboard][:tmp_dir] = "/tmp/attachments"
+default[:gearman_dashboard][:attachment_url] = "http://raven-opensource.s3.amazonaws.com"

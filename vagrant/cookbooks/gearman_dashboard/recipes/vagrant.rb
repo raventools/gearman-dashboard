@@ -11,3 +11,5 @@ bash "fix-dns" do
     EOH
 end
 
+include_recipe "gearman_dashboard::install_supervisord"
+include_recipe "gearman_dashboard::install_gearman"
