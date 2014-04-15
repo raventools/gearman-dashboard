@@ -27,8 +27,7 @@ class Rightscale_model extends MY_Model {
 					"id" => $parsed->id,
 					"public_ip" => $details->{"ip-address"},
 					"private_ip" => $details->{"private-ip-address"},
-					"port" => 4730,
-					"graphs" => $graphs
+					"port" => 4730
 					);
 			$masters->{$parsed->id} = $master;
 		}

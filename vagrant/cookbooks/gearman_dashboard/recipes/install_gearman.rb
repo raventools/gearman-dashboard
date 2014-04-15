@@ -46,7 +46,7 @@ directory gearmand_wdir do
 	mode 0755
 end
 
-gearmand_command = "/usr/sbin/gearmand --pid-file=#{gearmand_wdir}/gearmand.pid --log-file=stderr --round-robin --job-retries=1"
+gearmand_command = "/usr/sbin/gearmand --pid-file=#{gearmand_wdir}/gearmand.pid --listen=0.0.0.0 --log-file=stderr --round-robin --job-retries=1"
 template "/etc/supervisor.d/gearmand.conf" do
 	source "supervisor_program.conf.erb"
 	variables ({
@@ -59,7 +59,7 @@ template "/etc/supervisor.d/gearmand.conf" do
 	notifies :restart, "service[supervisord]", :delayed
 end
 
-worker_command = "php index.php gearmanworker work"
+worker_command = "php index.php gearmanworkercontroller work"
 worker_wdir = "#{node[:gearman_dashboard][:vhost][:documentroot]}"
 template "/etc/supervisor.d/gearman_worker.conf" do
 	source "supervisor_program.conf.erb"

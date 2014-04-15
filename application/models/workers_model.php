@@ -17,7 +17,7 @@ class Workers_model extends MY_Model {
 		$this->load->model("instances_model");
 		$instance = $this->instances_model->get($master_id,$instance_id);
 		$supervisord = $this->loadConfig("supervisord");
-		if($this->fetch($instance->private_ip_address,$supervisord->port) === false) {
+		if($this->fetch($master_id,$instance->private_ip_address,$supervisord->port) === false) {
 			return false;
 		}
 
@@ -29,7 +29,7 @@ class Workers_model extends MY_Model {
 		return false;
 	}
 
-	private function fetch($ip,$port) {
+	private function fetch($master_id,$ip,$port) {
 		$supervisor = new SupervisorClient($ip,$port,$this->timeout);
 		try {
 			$supervisord = $this->loadConfig("supervisord");
@@ -45,14 +45,26 @@ class Workers_model extends MY_Model {
 		if(is_null($all_procs)) {
 			return false;
 		}
+		$registered = $this->getRegisteredWorkers($master_id,$ip);
 		foreach($all_procs as $proc) {
 			$proc = (object)$proc;
 			if($proc->group == self::$gearman_worker_group) {
-				$this->workers->{$proc->pid} = $proc;
+				$parsed = $this->parseProc($proc,$registered->{$proc->pid});
+				$this->workers->{$proc->pid} = $parsed;
 				$count++;
 			}
 		}
 		return ($count > 0 ? $this->workers : false);
+	}
+
+	private function parseProc($proc,$registered) {
+		$ret = new StdClass();
+		$ret->functions = $registered->functions;
+		$ret->state = $proc->statename;
+		$ret->pid = $proc->pid;
+		$ret->uptime = ($proc->now - $proc->start);
+		$ret->idx = $proc->name;
+		return $ret;
 	}
 
 	private function getRegisteredWorkers($master_id,$ip) {

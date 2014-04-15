@@ -21,14 +21,21 @@ class Gearmand_model extends MY_Model {
 	public function workers($master_id) {
 		$this->workers = new StdClass();
 		$lines = $this->command($master_id,"workers");
+		$no_id = 0; // count workers with no id set
 
 		foreach($lines as $line) {
 			$worker = new StdClass();
-			list($info, $endpoints) = explode(" : ", $line);
-			list($worker->fd, $worker->ip, $worker->id) = explode(" ", $info);
-			$worker->endpoints = explode(" ",$endpoints);
+			$split = explode(" : ", $line);
+			list($worker->fd, $worker->ip, $worker->id) = explode(" ", $split[0]);
+			if($worker->id == "-") { 
+				$no_id++;
+				continue; // bogus worker
+			}
+			$worker->functions = explode(" ",$split[1]);
+			$worker->functions = array_map("trim",$worker->functions);
+			
 
-			$this->workers->{$worker->ip}[] = $worker;
+			$this->workers->{$worker->ip}->{$worker->id} = $worker;
 		}
 
 		return $this->workers;

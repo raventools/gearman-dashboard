@@ -13,3 +13,4 @@ end
 
 include_recipe "gearman_dashboard::install_supervisord"
 include_recipe "gearman_dashboard::install_gearman"
+include_recipe "gearman_dashboard::install_example_config"
