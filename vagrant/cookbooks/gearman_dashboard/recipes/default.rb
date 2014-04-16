@@ -11,6 +11,13 @@ directory node[:gearman_dashboard][:vhost][:documentroot] do
 	recursive true
 end
 
+# create attachments dir
+directory node[:gearman_dashboard][:tmp_dir] do
+	action :create
+	recursive true
+end
+
+# disable ipv6
 file "/etc/modprobe.d/ipv6.conf" do
 	content <<-EOH
 	alias ipv6 off

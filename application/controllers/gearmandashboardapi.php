@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class GearmanDashboardAPI extends CI_Controller {
+class GearmanDashboardAPI extends MY_Controller {
 
 	public function __construct() {
 		parent::__construct();
@@ -188,20 +188,7 @@ class GearmanDashboardAPI extends CI_Controller {
 			"detail" => $details,
 			"data" => $data
 			);
-		$this->json($response);
+		$this->echoJSON($response);
 	}
 
-	protected function json($data) {
-
-		switch($this->format) {
-			case "jsonp":
-				header("Content-type: text/javascript");
-				break;
-			case "json":
-				header("Content-type: application/json");
-				break;
-		}
-
-		echo json_encode($data)."\n";
-	}
 }

@@ -1,7 +1,8 @@
 {
-	"Gearman Server": {
-		"Default Array": {
-			"metapackage": "everything",
+	"1": {
+		"1": {
+			"name": "Default Array",
+			"array_id": "1",
 			"scaling": "manual",
 			"min_instances": 1,
 			"max_instances": 1,
