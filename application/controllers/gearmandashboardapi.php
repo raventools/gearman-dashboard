@@ -105,6 +105,20 @@ class GearmanDashboardAPI extends MY_Controller {
 	}
 
 	/**
+	 * Restarts a worker process or all workers on an instance if no worker_id provided
+	 */
+	public function RestartWorkers($master_id,$instance_id,$worker_id=null) {
+		try {
+			$this->load->model("workers_model");
+			$status = $this->workers_model->restart($master_id,$instance_id,$worker_id);
+		} catch(Exception $e) {
+			$this->ERROR($e->getMessage());
+		}
+
+		$this->OK("RestartWorkers",$status);
+	}
+
+	/**
 	 * retrieve queue status
 	 */
 	public function Queues($master_id) {
