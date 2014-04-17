@@ -47,7 +47,9 @@ class Workers_model extends MY_Model {
 		$registered = $this->getRegisteredWorkers($master_id,$instance->private_ip_address);
 		foreach($all_procs as $proc) {
 			$proc = (object)$proc;
-			$proc->functions = $registered->{$proc->pid}->functions;
+			if(isset($registered->{$proc->pid})) {
+				$proc->functions = $registered->{$proc->pid}->functions;
+			}
 			$this->workers->{$proc->pid} = $proc;
 			$count++;
 		}
@@ -67,6 +69,10 @@ class Workers_model extends MY_Model {
 	private function getRegisteredWorkers($master_id,$ip) {
 		$this->load->model("gearmand_model");
 		$registered = $this->gearmand_model->workers($master_id);
-		return $registered->{$ip};
+		if(isset($registered->{$ip})) {
+			return $registered->{$ip};
+		} else {
+			return false;
+		}
 	}
 }
