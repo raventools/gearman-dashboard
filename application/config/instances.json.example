@@ -1,11 +1,20 @@
 {
 	"1": {
 		"1": {
+			"id": "1",
+			"name": "Default Array - #1",
+			"state": "operational",
+			"server_template_id":"1",
+			"deployment_id":"1",
 			"ip_address": "127.0.0.1",
 			"private_ip_address": "127.0.0.1",
 			"array_id": "1",
+			"array_name": "Default Array",
 			"port": 9110,
-			"workers": 4
+			"workers": 4,
+			"master_ip":"127.0.0.1",
+			"master_id":"1",
+			"metapackage":"everything"
 		}
 	}
 }

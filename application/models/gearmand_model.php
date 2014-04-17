@@ -31,9 +31,11 @@ class Gearmand_model extends MY_Model {
 				$no_id++;
 				continue; // bogus worker
 			}
-			$worker->functions = explode(" ",$split[1]);
-			$worker->functions = array_map("trim",$worker->functions);
-			
+
+			if(isset($split[1])) {
+				$worker->functions = explode(" ",$split[1]);
+				$worker->functions = array_map("trim",$worker->functions);
+			}
 
 			$this->workers->{$worker->ip}->{$worker->id} = $worker;
 		}
