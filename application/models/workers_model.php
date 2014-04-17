@@ -14,10 +14,7 @@ class Workers_model extends MY_Model {
 
 	public function get($master_id,$instance_id,$worker_id=null) {
 
-		$this->load->model("instances_model");
-		$instance = $this->instances_model->get($master_id,$instance_id);
-		$supervisord = $this->loadConfig("supervisord");
-		if($this->fetch($master_id,$instance->private_ip_address,$supervisord->port) === false) {
+		if($this->fetch($master_id,$instance_id) === false) {
 			return false;
 		}
 
@@ -29,30 +26,30 @@ class Workers_model extends MY_Model {
 		return false;
 	}
 
-	private function fetch($master_id,$ip,$port) {
-		$supervisor = new SupervisorClient($ip,$port,$this->timeout);
-		try {
-			$supervisord = $this->loadConfig("supervisord");
-			if($supervisor->authenticate($supervisord->username,$supervisord->password) === false) {
-				throw new Exception("invalid supervisor user/pass");
-			}
-		} catch(Exception $e) {
-			error_log("supervisor auth exception ".$e->getMessage());
-		}
+	public function restart($master_id,$instance_id,$worker_id) {
+		$this->load->model("supervisor_model");
+		$this->supervisor_model->init($master_id,$instance_id);
+		return $this->supervisor_model->restart($worker_id);
+	}
+
+	private function fetch($master_id,$instance_id) {
+
+		$this->load->model("instances_model");
+		$instance = $this->instances_model->get($master_id,$instance_id);
 		$this->workers = new StdClass();
 		$count = 0;
-		$all_procs = $supervisor->getAllProcessInfo();
+		$this->load->model("supervisor_model");
+		$this->supervisor_model->init($master_id,$instance_id);
+		$all_procs = $this->supervisor_model->get();
 		if(is_null($all_procs)) {
 			return false;
 		}
-		$registered = $this->getRegisteredWorkers($master_id,$ip);
+		$registered = $this->getRegisteredWorkers($master_id,$instance->private_ip_address);
 		foreach($all_procs as $proc) {
 			$proc = (object)$proc;
-			if($proc->group == self::$gearman_worker_group) {
-				$parsed = $this->parseProc($proc,$registered->{$proc->pid});
-				$this->workers->{$proc->pid} = $parsed;
-				$count++;
-			}
+			$proc->functions = $registered->{$proc->pid}->functions;
+			$this->workers->{$proc->pid} = $proc;
+			$count++;
 		}
 		return ($count > 0 ? $this->workers : false);
 	}
