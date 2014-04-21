@@ -20,6 +20,9 @@
     <!-- Handlebars template helper (abstraction) -->
     <script src="/assets/js/templatehelper.js"></script>
 
+    <!-- Error object and message helper (abstraction) -->
+    <script src="/assets/js/errorhelper.js"></script>
+
     <!-- AJAX request helper (abstraction) -->
     <script src="/assets/js/request.js"></script>
 
@@ -28,6 +31,8 @@
 	<script src="/assets/js/models/metapackages.js"></script>    
 	<script src="/assets/js/models/processes.js"></script>    
 	<script src="/assets/js/models/servers.js"></script>    
+    <script src="/assets/js/models/arrays.js"></script>    
+    <script src="/assets/js/models/instances.js"></script>    
 	<script src="/assets/js/models/workers.js"></script>    
 
     <!-- Backbone routes -->

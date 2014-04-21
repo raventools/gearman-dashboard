@@ -33,15 +33,10 @@ class GearmanDashboardAPI extends MY_Controller {
 	 * given a master server id, 
 	 * return list of server arrays associated with a particular master server
 	 */
-	public function Arrays($array_id=null) {
-		if(!is_null($array_id)) {
-			$array_id = urldecode($array_id); 
-		}
-
+	public function Arrays($master_id=null, $array_id=null) {
 		try {
 			$this->load->model("arrays_model");
-			$arrays = $this->arrays_model->get($array_id);
-
+			$arrays = $this->arrays_model->get($master_id, $array_id);
 		} catch(Exception $e) {
 			$this->ERROR($e->getMessage());
 		}
@@ -56,12 +51,10 @@ class GearmanDashboardAPI extends MY_Controller {
 	/**
 	 * given an array id, returns a list of server instances associated with a particular array
 	 */
-	public function Instances($master_id=null,$instance_id=null) {
-
+	public function Instances($array_id=null,$instance_id=null) {
 		try {
 			$this->load->model("instances_model");
-			$instances = $this->instances_model->get($master_id,$instance_id);
-
+			$instances = $this->instances_model->get($array_id,$instance_id);
 		} catch(Exception $e) {
 			$this->ERROR($e->getMessage());
 		}

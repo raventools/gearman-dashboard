@@ -4,100 +4,56 @@ Models.Servers = {
 
 	'getMasters' : function (options, callback) {
 		Request.get(this.api_endpoint + '/masters', {}, function (response) {
-			var formatted_data = [];
-
-			_.each(response.data, function (value, key) {
-				value['name'] = key;
-
-				formatted_data.push(value);
-			});
-
-			response.data.servers = formatted_data;
+			var formatted_data = {
+				'servers' : response.data
+			};
 
 			if (_.isFunction(callback)) {
-				callback(response);
+				callback(formatted_data);
 			}
 		}, 'json');		
 	},
 
 	'getInstances' : function (options, callback) {
 		Request.get(this.api_endpoint + '/instances', function (response) {
-			var formatted_data = [];
+			var formatted_data = {
+				'servers' : []
+			};
 
-			_.each(response.data, function (value, key) {
-				value['name'] = key;
+			var master, instance, new_instance;
 
-				formatted_data.push(value);
-			});
+			for (master in response.data) {
+				for (instance in (response.data)[master]) {
+					new_instance = (response.data)[master][instance];
+					new_instance.master_id = master;
 
-			response.data.servers = formatted_data;
+					(formatted_data.servers).push(new_instance);
+				}
+			}
 
 			if (_.isFunction(callback)) {
-				callback(response);
+				callback(formatted_data);
 			}
 		}, 'json');		
 	},
 
-	'getServersSummary' : function (options, callback) {
-		var filter_type = 'all',
-			filter_id = 0;
-
-		if (_.isObject(options) && !fn.empty(options.filter_type)) {
-			filter_type = options.filter_type;
+	'getMaster' : function (options, callback) {
+		if (fn.empty(options) || fn.empty(options.master_id)) {
+			throw ErrorHelper.getText('masters', 'missing_id');
 		}
 
-		if (_.isObject(options) && !fn.empty(options.filter_id)) {
-			filter_id = options.filter_id;
-		}
+		Request.get(this.api_endpoint + '/masters/' + options.master_id, {}, function (response) {
+			var formatted_data = {
+				'servers' : [
+					response.data
+				]
+			};
 
-		Request.get(this.endpoint, {
-			'method' : 'getServersSummary'
-		}, function (response) {
+			formatted_data.servers[0].record_view = 1; // signify that this is an individual record
+
 			if (_.isFunction(callback)) {
-				callback(response);
+				callback(formatted_data);
 			}
-		}, 'json');
-	},
-
-	'getServersByHealth' : function (options, callback) {
-		var filter_type = 'all',
-			filter_id = 0;
-
-		if (_.isObject(options) && !fn.empty(options.filter_type)) {
-			filter_type = options.filter_type;
-		}
-
-		if (_.isObject(options) && !fn.empty(options.filter_id)) {
-			filter_id = options.filter_id;
-		}
-
-		Request.get(this.endpoint, {
-			'method' : 'getServersByHealth'
-		}, function (response) {
-			if (_.isFunction(callback)) {
-				callback(response);
-			}
-		}, 'json');
-	},
-
-	'getServersByWorkers' : function (options, callback) {
-		var filter_type = 'all',
-			filter_id = 0;
-
-		if (_.isObject(options) && !fn.empty(options.filter_type)) {
-			filter_type = options.filter_type;
-		}
-
-		if (_.isObject(options) && !fn.empty(options.filter_id)) {
-			filter_id = options.filter_id;
-		}
-
-		Request.get(this.endpoint, {
-			'method' : 'getServersByWorkers'
-		}, function (response) {
-			if (_.isFunction(callback)) {
-				callback(response);
-			}
-		}, 'json');
+		}, 'json');		
 	}
 };

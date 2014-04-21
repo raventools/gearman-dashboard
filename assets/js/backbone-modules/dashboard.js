@@ -1,51 +1,138 @@
 var Dashboard = {
 	'routes' : {
+		'dashboard' : 'Dashboard',
+
 		'servers' : 'Servers',
-		'servers/server/:server_id' : 'Servers',
-		'servers/grid/:grid_name' : 'Servers',
+		'servers/:master_id' : 'Servers',
+
+		'arrays' : 'Arrays',
+		'arrays/:array_id' : 'Arrays',
 
 		'metapackages' : 'Metapackages',
 
 		'workers' : 'Workers',
-		/*
-		'workers/running' : 'Workers',
-		'workers/idle' : 'Workers',
-		'workers/package' : 'Workers',
-		'workers/worker/:worker_id' : 'Workers',
-		*/
-
+		
 		'processes' : 'Processes',
 
 		'errors' : 'Errors',
 
+		// default route for handling "404s"
 		'*default' : 'Default'
 	}	
 };
 
-Dashboard.Servers = function (filter_type, filter_id) {
-	RouteHelper.init('servers');
+/**
+ * Dashboard route - a combination of data from other views
+ **/
 
-	if (fn.empty(filter_type)) {
-		filter_type = 'all';
-	}	
+Dashboard.Dashboard = function () {
+	RouteHelper.init('dashboard');
 
-	if (fn.empty(filter_id)) {
-		filter_id = 0;
+	RouteHelper.addView('servers');
+	RouteHelper.addView('arrays');
+
+	Dashboard.Servers.defaultView();
+	Dashboard.Arrays.defaultView();
+};
+
+/**
+ * Servers route
+ **/
+
+Dashboard.Servers = function (master_id) {
+	if (fn.empty(master_id)) {
+		master_id = 0;
 	}
 
-	if (filter_id == 0) {
-		Models.Servers.getMasters({}, function (data) {
-			var content = TemplateHelper.renderTemplate('servers_masters_table', data.data);
+	if (master_id == 0) {
+		RouteHelper.init('servers');
 
-			RouteHelper.appendContent(content, '#list_masters');
+		Dashboard.Servers.defaultView();		
+	}
+	else {
+		RouteHelper.init('server');
+
+		Models.Servers.getMaster({
+			'master_id' : master_id
+		}, function (data) {
+			data.title = 'Master Details'; 
+
+			var content = TemplateHelper.renderTemplate('servers_masters_table', data);
+
+			RouteHelper.appendContent(content, '#list_details');
 		});
 
-		Models.Servers.getInstances({}, function (data) {
-			var content = TemplateHelper.renderTemplate('servers_instances_table', data.data);
+		Models.Arrays.getMasterArrays({
+			'master_id' : master_id
+		}, function (data) {
+			data.title = 'Arrays in Master';
+
+			var content = TemplateHelper.renderTemplate('arrays_all_table', data);
+
+			RouteHelper.appendContent(content, '#list_arrays');
+		});
+	}
+};
+
+Dashboard.Servers.defaultView = function () {
+	Models.Servers.getMasters({}, function (data) {
+		var content = TemplateHelper.renderTemplate('servers_masters_table', data);
+
+		RouteHelper.appendContent(content, '#list_masters');
+	});
+
+	Models.Servers.getInstances({}, function (data) {
+		var content = TemplateHelper.renderTemplate('servers_instances_table', data);
+
+		RouteHelper.appendContent(content, '#list_instances');
+	});
+};
+
+/**
+ * Arrays route
+ **/
+
+Dashboard.Arrays = function (array_id) {
+	RouteHelper.init('arrays');
+
+	if (fn.empty(array_id)) {
+		array_id = 0;
+	}
+
+	if (array_id == 0) {
+		Dashboard.Arrays.defaultView();
+	}
+	else {
+		RouteHelper.init('array');
+
+		Models.Arrays.getArray({
+			'array_id' : array_id
+		}, function (data) {
+			data.title = 'Array Details';
+
+			var content = TemplateHelper.renderTemplate('arrays_all_table', data);
+
+			RouteHelper.appendContent(content, '#list_details');
+		});
+
+		Models.Instances.getArrayInstances({
+			'array_id' : array_id
+		}, function (data) {
+			data.title = 'Instances in Array';
+
+			var content = TemplateHelper.renderTemplate('arrays_all_table', data);
 
 			RouteHelper.appendContent(content, '#list_instances');
 		});
 	}
+};
+
+Dashboard.Arrays.defaultView = function () {
+	Models.Arrays.getArrays({}, function (data) {
+		var content = TemplateHelper.renderTemplate('arrays_all_table', data);
+
+		RouteHelper.appendContent(content, '#list_arrays');
+	});
 };
 
 Dashboard.Metapackages = function () {
@@ -90,7 +177,7 @@ Dashboard.Errors = function () {
 
 Dashboard.Default = function (path) {
 	if (_.isNull(path)) {
-		RouteHelper.navigate('servers');		
+		RouteHelper.navigate(RouteHelper.default_route);		
 
 		return false;
 	}
