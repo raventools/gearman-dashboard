@@ -16,10 +16,9 @@
 		function __construct($account, $username, $password)
 		{
 			$this->account = $account;
-			$this->login($username, $password);
-			$this->url_base = "https://my.rightscale.com/api/acct/{$this->account}/";
-
+			$this->url_base = "https://us-4.rightscale.com/api/acct/{$this->account}/";
 			parent::__construct();
+			$this->login($username, $password, "login");
 		}
 
 		function initEC2($aws_key,$aws_secret,$zone="us")
@@ -101,11 +100,6 @@
 		}
 
 		function getServerByTags($tags) {
-			/*
-			if(is_string($tags)) {
-				$tags = array($tags);
-			}
-			*/
 			$extra['get']['resource_type'] = "ec2_instance";
 			$extra['get']['tags'] = $tags;
 			$url = "tags/search.{$this->format}";
@@ -114,6 +108,13 @@
 
 		function getArrayByTags($tags) {
 			$extra['get']['resource_type'] = "server_array";
+			$extra['get']['tags'] = $tags;
+			$url = "tags/search.{$this->format}";
+			return $this->request($url,$extra);
+		}
+
+		function getDeploymentByTags($tags) {
+			$extra['get']['resource_type'] = "deployment";
 			$extra['get']['tags'] = $tags;
 			$url = "tags/search.{$this->format}";
 			return $this->request($url,$extra);
@@ -196,8 +197,8 @@
 		{
 			$url = "server_arrays/$array_id/run_script_on_instances.{$this->format}";
 			$post = array(
-				'server_array[right_script_href]' => $this->url_base."right_scripts/$script_id",
-				'server_array[ec2_instance_hrefs]' => $this->url_base . "ec2_instances/$instance_id"
+				'ec2_server_array[right_script_href]' => $this->url_base."right_scripts/$script_id",
+				'ec2_server_array[ec2_instance_hrefs]' => $this->url_base . "ec2_instances/$instance_id"
 			);
 			return $this->request($url, array('post'=>$post));
 		}

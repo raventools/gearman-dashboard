@@ -24,6 +24,8 @@ class RestApi {
 
 	public $last_http_code;
 
+	protected $cookie_filename = null;
+
 	public function __construct($curlLibrary = null)
 	{
 		global $docroot;
@@ -74,16 +76,25 @@ class RestApi {
 		}
 	}
 
-	public function login($username, $password)
+	public function login($username, $password, $cookie_auth_endpoint = null)
 	{
 		$this->username = $username;
 		$this->password = $password;
+		if(!is_null($cookie_auth_endpoint)) {
+			$this->cookie_auth($cookie_auth_endpoint);
+		}
 	}
 
 	public function logout()
 	{
 		$this->username = null;
 		$this->password = null;
+	}
+
+	private function cookie_auth($cookie_auth_endpoint) 
+	{
+		$this->cookie_filename = "/tmp/".get_class($this).md5($this->username.$this->password);
+		$this->request($cookie_auth_endpoint);
 	}
 
 	public function setFormat($format)
@@ -203,6 +214,19 @@ class RestApi {
 
 		if ($this->curlLibrary->reuse_curl_handle === false || ($this->curlLibrary->getCurl() === null)) {
 			$this->curlLibrary->initCurl();
+		}
+
+		// if additional curl options are needed, pass them in via $extra['curl_opts']
+		if(isset($extra['curl_opts'])) {
+			foreach($extra['curl_opts'] as $opt_key => $opt_val) {
+				$this->curlLibrary->setCurlOption($opt_key,$opt_val);
+			}
+		}
+
+		// if we're using cookies, set up the cookie jar
+		if(isset($this->cookie_filename)) {
+			$this->curlLibrary->setCurlOption(CURLOPT_COOKIEJAR,$this->cookie_filename);
+			$this->curlLibrary->setCurlOption(CURLOPT_COOKIEFILE,$this->cookie_filename);
 		}
 
 		$this->curlLibrary->setCurlOption(CURLOPT_URL, $url);
