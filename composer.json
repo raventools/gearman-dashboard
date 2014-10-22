@@ -1,0 +1,21 @@
+{
+    "name": "raventools/gearmandashboard",
+    "description": "Dashboard for managing gearman clusters",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Phil Dier",
+            "email": "phil@dier.us"
+        }
+    ],
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/raventools/RightscaleAPIClient"
+        }
+    ],
+    "require": {
+        "raventools/RightscaleAPIClient": "master"
+    }
+}
