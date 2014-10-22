@@ -14,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	overrides = JSON.parse(IO.read(File.dirname(__FILE__)+"/overrides.json"))
 
 	config.vm.synced_folder overrides["local_repo_dir"], 
-		"/home/webapps/gearman_dashboard", 
+		"/home/webapps/gearman_dashboard/current", 
 		type: "nfs"
 
 	config.vm.provision :chef_solo do |chef|

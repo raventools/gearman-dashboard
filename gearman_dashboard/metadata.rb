@@ -87,6 +87,13 @@ attribute "gearman_dashboard/supervisord/port",
 	:default => "9110",
     :recipes => ["gearman_dashboard::default","gearman_dashboard::deploy_tag"]
 
+attribute "gearman_dashboard/deploy/dir",
+    :display_name => "App deploy directory",
+    :description => "App deploy directory",
+    :required => "recommended",
+    :type => "string",
+    :recipes => ["gearman_dashboard::default","gearman_dashboard::deploy_tag"]
+
 attribute "gearman_dashboard/deploy/repo",
     :display_name => "Git Repository URL",
     :description => "Git Repository URL",
