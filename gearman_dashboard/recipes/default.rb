@@ -1,4 +1,10 @@
 
+# create attachments dir
+directory node[:gearman_dashboard][:tmp_dir] do
+	action :create
+	recursive true
+end
+
 # configures epel and epel-rightscale repos
 include_recipe "gearman_dashboard::setup_epel"
 
@@ -10,12 +16,6 @@ include_recipe "gearman_dashboard::install_supervisord"
 
 # create repo dir for both vagrant and production
 directory node[:gearman_dashboard][:vhost][:documentroot] do
-	action :create
-	recursive true
-end
-
-# create attachments dir
-directory node[:gearman_dashboard][:tmp_dir] do
 	action :create
 	recursive true
 end
