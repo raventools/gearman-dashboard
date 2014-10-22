@@ -2,7 +2,7 @@
 default[:gearman_dashboard][:vhost][:name] = "gearmandashboard"
 default[:gearman_dashboard][:vhost][:servername] = "gearmandashboard.site"
 default[:gearman_dashboard][:vhost][:serveraliases] = []
-default[:gearman_dashboard][:vhost][:documentroot] = "/home/webapps/gearmandashboard"
+default[:gearman_dashboard][:vhost][:documentroot] = "/home/webapps/gearman_dashboard"
 
 # rightscale
 default[:gearman_dashboard][:rightscale][:account_id] = "0000"

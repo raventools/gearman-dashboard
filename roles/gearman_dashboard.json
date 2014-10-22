@@ -27,9 +27,7 @@
 	"chef_type": "role",
 	"run_list": [
 		"gearman_dashboard::default",
-		"gearman_dashboard::vagrant",
-		"gearman_dashboard::setup_rightscale",
-		"gearman_dashboard::setup_supervisord"
+		"gearman_dashboard::vagrant"
 	],
 	"env_run_lists": {
 	}

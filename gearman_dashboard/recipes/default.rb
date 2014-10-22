@@ -5,6 +5,9 @@ include_recipe "gearman_dashboard::setup_epel"
 # installs and configures httpd; sets up vhost
 include_recipe "gearman_dashboard::setup_vhost"
 
+# installs and configures supervisor daemon
+include_recipe "gearman_dashboard::install_supervisord"
+
 # create repo dir for both vagrant and production
 directory node[:gearman_dashboard][:vhost][:documentroot] do
 	action :create

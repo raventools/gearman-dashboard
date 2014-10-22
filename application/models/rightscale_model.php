@@ -1,12 +1,28 @@
 <?php
 
+use RavenTools\RightscaleAPIClient\Client as RSClient;
+
 class Rightscale_model extends MY_Model {
 
-	private $rs = null;
+	private $rs_client = null;
 	
 	public function __construct() {
-		$config = $this->loadConfig("rightscale");
-		$this->rs = new Rightscale($config->account_id,$config->username,$config->password);
+		parent::__construct();
+	}
+
+	/**
+	 * allows us to only init rs client if we need it
+	 */
+	public function RSClient() {
+		if(is_null($this->rs_client)) {
+			$config = $this->loadConfig("rightscale");
+			$this->rs_client = new RSClient(array(
+							"account_id" => $config->account_id,
+							"email" => $config->username,
+							"password" => $config->password
+					));
+		}
+		return $this->rs_client;
 	}
 
 	/**
@@ -14,22 +30,24 @@ class Rightscale_model extends MY_Model {
 	 */
 	public function masters() {
 		$masters = new StdClass();
-		$raw_servers = $this->rs->getServerByTags("server:type=gearman_master");
-		if($raw_servers === false) {
+
+		$tag = "server:type=gearman_master";
+		$raw_servers = $this->getResourcesByTags("servers", array($tag));
+
+		if(empty($raw_servers)) {
 			return array();
 		}
 
 		foreach($raw_servers as $raw) {
-			$parsed = $this->rs->parseServer($raw);
-			$details = $this->rs->getServerSettings($parsed->id);
+			$detail = $raw->current_instance()->show();
 			$master = (object) array(
-					"name" => $parsed->name,
-					"id" => $parsed->id,
-					"public_ip" => $details->{"ip-address"},
-					"private_ip" => $details->{"private-ip-address"},
+					"name" => $raw->name,
+					"href" => $raw->href,
+					"public_ip" => $detail->public_ip_addresses[0],
+					"private_ip" => $detail->private_ip_addresses[0],
 					"port" => 4730
 					);
-			$masters->{$parsed->id} = $master;
+			$masters->{$raw->href} = $master;
 		}
 
 		return $masters;
@@ -40,24 +58,24 @@ class Rightscale_model extends MY_Model {
 	 */
 	public function arrays() {
 		$arrays = new StdClass();
-		$raw_arrays = $this->rs->getArrayByTags("server:type=gearman_instance");
-		if($raw_arrays === false) {
+		$raw_arrays = $this->getArrayByTags(array("server:type=gearman_instance"));
+		if(empty($raw_arrays)) {
 			return array();
 		}
 
 		foreach($raw_arrays as $raw) {
-			$parsed = $this->rs->parseServer($raw);
+			$detail = $raw->show(array("view"=>"instance_detail"));
 			$array = (object) array(
-					"name" => $parsed->name,
-					"array_id" => $parsed->id,
-					"scaling" => ($raw->active ? "automatic" : "manual"),
-					"deployment_id" => $parsed->deployment_id,
-					"server_template_id" => $parsed->server_template_id,
-					"cur_instances" => $raw->active_instances_count,
-					"min_instances" => $raw->elasticity->min_count,
-					"max_instances" => $raw->elasticity->max_count
+					"name" => $raw->name,
+					"href" => $raw->href,
+					"scaling" => ($raw->state == "disabled" ? "automatic" : "manual"),
+					"deployment" => $raw->deployment()->show()->href,
+					"server_template" => $detail->next_instance()->show()->server_template()->show()->href,
+					"cur_instances" => $raw->instances_count,
+					"min_instances" => $raw->elasticity_params->bounds->min_count,
+					"max_instances" => $raw->elasticity_params->bounds->max_count
 					);
-			$arrays->{$parsed->id} = $array;
+			$arrays->{$raw->href} = $array;
 		}
 		return $arrays;
 	}
@@ -67,45 +85,23 @@ class Rightscale_model extends MY_Model {
 	 */
 	public function instances() {
 		$instances = new StdClass();
-		$ungrouped = new StdClass();
 
 		// list all instances in arrays, necessary to get ip addresses
 		$this->load->model("arrays_model");
 		$arrays = $this->arrays_model->get();
 		foreach($arrays as $a) {
-			$array_instances = $this->rs->getServerArrayInstances($a->array_id);
+			$array_instances = $this->getArrayInstances($a->href);
 			foreach($array_instances as $i) {
-				$i->array_id = $a->array_id;
-				$i->array_name = $a->name;
-				$ungrouped->{$i->nickname} = $i;
+				$instance = new StdClass();
+				$instance->name = $i->name;
+				$instance->href = $i->href;
+				$instance->private_ip = $i->private_ip_addresses[0];
+				$instance->public_ip = $i->public_ip_addresses[0];
+				$instance->created_at = $i->created_at;
+				$instances->{$a->href}->{$i->href} = $instance;
 			}
 		}
 
-		// get instances by server tag, necessary to get input variables
-		$raw_instances = $this->rs->getServerByTags("server:type=gearman_instance");
-		if($raw_instances === false) {
-			return array();
-		}
-
-		// parse and combine instance data
-		foreach($raw_instances as $raw) {
-			$parsed = $this->rs->parseServer($raw);
-			$parsed->master_ip = gethostbyname(str_replace("text:","",$parsed->inputs->GEARMAN_SERVER_IP));
-			$parsed->master_id = $this->getMasterID($parsed->master_ip);
-			$parsed->metapackage = str_replace("text:","",$parsed->inputs->GEARMAN_WORKER_PACKAGE);
-
-			if(isset($ungrouped->{$parsed->name})) {
-				$parsed->private_ip_address = $ungrouped->{$parsed->name}->private_ip_address;
-				$parsed->ip_address = $ungrouped->{$parsed->name}->ip_address;
-				$parsed->array_id =  $ungrouped->{$parsed->name}->array_id;
-				$parsed->array_name =  $ungrouped->{$parsed->name}->array_name;
-				$parsed->sketchy_base = $ungrouped->{$parsed->name}->monitoring_base_url;
-				$parsed->sketchy_token = $ungrouped->{$parsed->name}->monitoring_token;
-			} else {
-				error_log("tagged instance not found in any server array: {$parsed->name}");
-			}
-			$instances->{$parsed->master_id}->{$parsed->id} = $parsed;
-		}
 		return $instances;
 	}
 
@@ -145,4 +141,51 @@ class Rightscale_model extends MY_Model {
 		}
 		return false;
 	}
+
+	private function getResourcesByTags($resource_type, Array $tags) {
+
+		$response = $this->RSClient()->tags()->by_tag(array(
+							"resource_type" => $resource_type,
+							"tags" => $tags
+						));
+		$servers = array();
+		foreach($response as $detail) {
+			$resources = $detail->resource();
+			foreach($resources as $r) {
+				$rs_ob = $r->show();
+
+				$servers[] = $rs_ob;
+			}
+		}
+		return $servers;
+	}
+
+	private function getArrayByTags(Array $tags) {
+		$response = $this->RSClient()->tags()->by_tag(array(
+							"resource_type" => "server_arrays",
+							"tags" => $tags
+						));
+
+		$arrays = array();
+		foreach($response as $detail) {
+			$resources = $detail->resource();
+			foreach($resources as $r) {
+				$rs_ob = $r->show();
+
+				$arrays[] = $rs_ob;
+			}
+		}
+		return $arrays;
+	}
+
+	private function getArrayInstances($href) {
+		$id = basename($href);
+		$response = $this->RSClient()->server_arrays(array("id"=>$id))->show()->current_instances()->index();
+		$instances = array();
+		foreach($response as $instance) {
+			$instances[$instance->href] = $instance;
+		}
+		return $instances;
+	}
+
 }

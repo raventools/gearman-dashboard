@@ -11,6 +11,8 @@ bash "fix-dns" do
     EOH
 end
 
-include_recipe "gearman_dashboard::install_supervisord"
 include_recipe "gearman_dashboard::install_gearman"
 include_recipe "gearman_dashboard::install_example_config"
+
+release_path = node[:gearman_dashboard][:vhost][:documentroot]
+eval(File.read("#{release_path}/deploy/before_symlink.rb"))
