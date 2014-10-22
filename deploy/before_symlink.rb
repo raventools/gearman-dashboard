@@ -33,5 +33,5 @@ end
 		owner "apache"
 		group "apache"
 	end
-	not_if { File.exists?(path) }
+	not_if { ::File.exists?(path) }
 end
