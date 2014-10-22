@@ -18,7 +18,7 @@
 					"name":"gearman_dashboard",
 					"servername":"gearman_dashboard.site",
 					"serveraliases":["www.gearman_dashboard.site"],
-					"documentroot":"/home/webapps/gearman_dashboard/"
+					"documentroot":"/home/webapps/gearman_dashboard/current"
 			}
 		}
 	},

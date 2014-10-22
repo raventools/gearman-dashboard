@@ -15,7 +15,7 @@ include_recipe "gearman_dashboard::setup_vhost"
 include_recipe "gearman_dashboard::install_supervisord"
 
 # create repo dir for both vagrant and production
-directory node[:gearman_dashboard][:vhost][:documentroot] do
+directory node[:gearman_dashboard][:deploy][:dir] do
 	action :create
 	recursive true
 end

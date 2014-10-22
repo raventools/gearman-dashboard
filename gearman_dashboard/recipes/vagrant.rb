@@ -1,4 +1,9 @@
 
+directory node[:gearman_dashboard][:vhost][:documentroot] do
+	action :create
+	recursive true
+end
+
 bash "flush-iptables" do
     code <<-EOH
         iptables -F

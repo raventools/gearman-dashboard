@@ -19,7 +19,7 @@ end
 
 package "git"
 
-deploy node[:gearman_dashboard][:vhost][:documentroot] do
+deploy node[:gearman_dashboard][:deploy][:dir] do
     action :deploy
     provider Chef::Provider::Deploy::Revision
 	repo node[:gearman_dashboard][:deploy][:repo]

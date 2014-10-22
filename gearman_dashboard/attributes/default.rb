@@ -2,7 +2,7 @@
 default[:gearman_dashboard][:vhost][:name] = "gearmandashboard"
 default[:gearman_dashboard][:vhost][:servername] = "gearmandashboard.site"
 default[:gearman_dashboard][:vhost][:serveraliases] = []
-default[:gearman_dashboard][:vhost][:documentroot] = "/home/webapps/gearman_dashboard"
+default[:gearman_dashboard][:vhost][:documentroot] = "/home/webapps/gearman_dashboard/current"
 
 # rightscale
 default[:gearman_dashboard][:rightscale][:account_id] = "0000"
@@ -15,6 +15,7 @@ default[:gearman_dashboard][:supervisord][:password] = "12345"
 default[:gearman_dashboard][:supervisord][:port] = "9110"
 
 # deploy
+default[:gearman_dashboard][:deploy][:dir] = "/home/webapps/gearman_dashboard"
 default[:gearman_dashboard][:deploy][:repo] = "git@github.com:raventools/gearman-dashboard.git"
 default[:gearman_dashboard][:deploy][:branch] = "master"
 default[:gearman_dashboard][:deploy][:key] = ""
