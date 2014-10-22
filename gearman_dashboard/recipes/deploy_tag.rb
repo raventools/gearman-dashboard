@@ -19,12 +19,16 @@ end
 
 package "git"
 
-git node[:gearman_dashboard][:vhost][:documentroot] do
-	repository node[:gearman_dashboard][:deploy][:repo]
-	reference node[:gearman_dashboard][:deploy][:branch]
-	action :sync
-	ssh_wrapper wrapper_path
+deploy node[:gearman_dashboard][:vhost][:documentroot] do
+    action :deploy
+    provider Chef::Provider::Deploy::Revision
+	repo node[:gearman_dashboard][:deploy][:repo]
+	revision node[:gearman_dashboard][:deploy][:branch]
+    ssh_wrapper wrapper_path
+    symlink_before_migrate      ({})
+    symlinks                    ({})
+    purge_before_symlink        ([])
+    create_dirs_before_symlink  ([])
 end
 
 include_recipe "gearman_dashboard::setup_rightscale"
-include_recipe "gearman_dashboard::setup_supervisord"
