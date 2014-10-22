@@ -25,3 +25,13 @@ file path do
 			});
 end
 
+# insure php can write to these
+["masters","arrays","instances"].each do |n|
+	path = "#{release_path}/application/config/#{n}.json"
+	file path do
+		content "{}"
+		owner "apache"
+		group "apache"
+	end
+	not_if { File.exists?(path) }
+end
