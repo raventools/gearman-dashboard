@@ -32,6 +32,6 @@ end
 		content "{}"
 		owner "apache"
 		group "apache"
+		not_if { ::File.exists?(path) }
 	end
-	not_if { ::File.exists?(path) }
 end
