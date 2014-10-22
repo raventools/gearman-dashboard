@@ -49,35 +49,35 @@ attribute "gearman_dashboard/rightscale/account_id",
     :description => "Rightscale API Account ID",
     :required => "recommended",
     :type => "string",
-    :recipes => ["gearman_dashboard::default","gearman_dashboard::setup_rightscale"]
+    :recipes => ["gearman_dashboard::default","gearman_dashboard::deploy_tag"]
 
 attribute "gearman_dashboard/rightscale/username",
     :display_name => "Rightscale API Username",
     :description => "Rightscale API Username",
     :required => "recommended",
     :type => "string",
-    :recipes => ["gearman_dashboard::default","gearman_dashboard::setup_rightscale"]
+    :recipes => ["gearman_dashboard::default","gearman_dashboard::deploy_tag"]
 
 attribute "gearman_dashboard/rightscale/password",
     :display_name => "Rightscale API Password",
     :description => "Rightscale API Password",
     :required => "recommended",
     :type => "string",
-    :recipes => ["gearman_dashboard::default","gearman_dashboard::setup_rightscale"]
+    :recipes => ["gearman_dashboard::default","gearman_dashboard::deploy_tag"]
 
 attribute "gearman_dashboard/supervisord/username",
     :display_name => "Supervisord username",
     :description => "Supervisord username",
     :required => "recommended",
     :type => "string",
-    :recipes => ["gearman_dashboard::default","gearman_dashboard::setup_supervisord"]
+    :recipes => ["gearman_dashboard::default","gearman_dashboard::deploy_tag"]
 
 attribute "gearman_dashboard/supervisord/password",
     :display_name => "Supervisord password",
     :description => "Supervisord password",
     :required => "recommended",
     :type => "string",
-    :recipes => ["gearman_dashboard::default","gearman_dashboard::setup_supervisord"]
+    :recipes => ["gearman_dashboard::default","gearman_dashboard::deploy_tag"]
 
 attribute "gearman_dashboard/supervisord/port",
     :display_name => "Supervisord port",
@@ -85,7 +85,7 @@ attribute "gearman_dashboard/supervisord/port",
     :required => "recommended",
     :type => "string",
 	:default => "9110",
-    :recipes => ["gearman_dashboard::default","gearman_dashboard::setup_supervisord"]
+    :recipes => ["gearman_dashboard::default","gearman_dashboard::deploy_tag"]
 
 attribute "gearman_dashboard/deploy/repo",
     :display_name => "Git Repository URL",

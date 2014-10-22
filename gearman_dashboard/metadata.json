@@ -95,7 +95,7 @@
       "type": "string",
       "recipes": [
         "gearman_dashboard::default",
-        "gearman_dashboard::setup_rightscale"
+        "gearman_dashboard::deploy_tag"
       ],
       "choice": [
 
@@ -109,7 +109,7 @@
       "type": "string",
       "recipes": [
         "gearman_dashboard::default",
-        "gearman_dashboard::setup_rightscale"
+        "gearman_dashboard::deploy_tag"
       ],
       "choice": [
 
@@ -123,7 +123,7 @@
       "type": "string",
       "recipes": [
         "gearman_dashboard::default",
-        "gearman_dashboard::setup_rightscale"
+        "gearman_dashboard::deploy_tag"
       ],
       "choice": [
 
@@ -137,7 +137,7 @@
       "type": "string",
       "recipes": [
         "gearman_dashboard::default",
-        "gearman_dashboard::setup_supervisord"
+        "gearman_dashboard::deploy_tag"
       ],
       "choice": [
 
@@ -151,7 +151,7 @@
       "type": "string",
       "recipes": [
         "gearman_dashboard::default",
-        "gearman_dashboard::setup_supervisord"
+        "gearman_dashboard::deploy_tag"
       ],
       "choice": [
 
@@ -166,7 +166,7 @@
       "default": "9110",
       "recipes": [
         "gearman_dashboard::default",
-        "gearman_dashboard::setup_supervisord"
+        "gearman_dashboard::deploy_tag"
       ],
       "choice": [
 
