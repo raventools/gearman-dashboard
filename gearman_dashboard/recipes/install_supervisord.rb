@@ -1,17 +1,17 @@
 
 [
-    ["python-meld3","python-meld3-0.6.10-1.noarch.rpm"],
-    ["python-setuptools","python-setuptools-2.2-1.noarch.rpm"],
-    ["python-supervisor","python-supervisor-3.0-1.noarch.rpm"]
+	["python-meld3","python-meld3-0.6.10-1.noarch.rpm"],
+	["python-setuptools","python-setuptools-2.2-1.noarch.rpm"],
+	["python-supervisor","python-supervisor-3.0-1.noarch.rpm"]
 ].each do |n,r|
-    tmp_path = "#{node[:gearman_dashboard][:tmp_dir]}/#{r}"
-    remote_file tmp_path do
-        source "#{node[:gearman_dashboard][:attachment_url]}/#{r}"
-    end
+	tmp_path = "#{node[:gearman_dashboard][:tmp_dir]}/#{r}"
+	remote_file tmp_path do
+		source "#{node[:gearman_dashboard][:attachment_url]}/#{r}"
+	end
 
-    rpm_package n do
-        source tmp_path
-    end
+	rpm_package n do
+		source tmp_path
+	end
 end
 
 
