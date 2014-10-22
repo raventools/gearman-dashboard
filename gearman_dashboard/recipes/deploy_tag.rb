@@ -30,5 +30,3 @@ deploy node[:gearman_dashboard][:vhost][:documentroot] do
     purge_before_symlink        ([])
     create_dirs_before_symlink  ([])
 end
-
-include_recipe "gearman_dashboard::setup_rightscale"
