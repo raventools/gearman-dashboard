@@ -9,7 +9,7 @@ class MY_Model extends CI_Model {
 	protected function loadConfig($name) {
 
 		$name = strtolower($name);
-		$path = APPPATH . "config/{$name}.json";
+		$path = "/tmp/{$name}.json";
 
 		if (!file_exists($path)) {
 			return new StdClass;
@@ -28,7 +28,7 @@ class MY_Model extends CI_Model {
 
 	protected function saveConfig($name,$data) {
 		$name = strtolower($name);
-		$path = APPPATH . "config/{$name}.json";
+		$path = "/tmp/{$name}.json";
 
 		if (!file_exists($path)) {
 			touch($path); // inappropriately
